@@ -15,12 +15,12 @@ public class Reader {
 	
 	private SLOC sloc;
 	private Cyclomatic cyclomatic;
-	//private Halstead halstead;
+	private Halstead halstead;
 	
 	public Reader() {  
 		sloc = new SLOC();
 		cyclomatic = new Cyclomatic();
-		//halstead = new Halstead();
+		halstead = new Halstead();
 	}
 	
 	public void read(Connection connection) {
@@ -33,7 +33,7 @@ public class Reader {
 			{
 				sloc.readLine(line);
 				cyclomatic.readLine(line);
-				//halstead.readLine(line);
+				halstead.readLine(line);
 			}
 			
 			bufferedReader.close();

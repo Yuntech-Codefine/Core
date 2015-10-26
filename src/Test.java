@@ -19,7 +19,7 @@ public class Test {
 			//Connection connection = new Connection(url);
 			//reader.read(connection);
 			
-			FileInputStream fis = new FileInputStream("test.java");
+			FileInputStream fis = new FileInputStream("t.java");
 			
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fis));
 			
@@ -28,11 +28,11 @@ public class Test {
 			while ((line = bufferedReader.readLine()) != null)
 			{
 				cyclomatic.readLine(line);
-				//halstead.readLine(line);
+				halstead.readLine(line);
 			}
 			
 			bufferedReader.close();
-			
+			System.out.println(halstead.getValue());
 			//Reader reader = new Reader();
 			//reader.read(connection);
 			//System.out.println(reader.getCyclomatic());
@@ -45,7 +45,7 @@ public class Test {
 			//e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 }
