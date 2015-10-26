@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Halstead extends Algorithm {
 	private double value;
 
-	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫
+	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫字元1234444
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t",};
     String keyschar[] = {"case","int", "abstract", "continue", "for", "new", "switch", "assert", "default",
     	"goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break", 
