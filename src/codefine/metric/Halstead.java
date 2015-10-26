@@ -11,7 +11,7 @@ public class Halstead extends Algorithm {
 	private double value;
 	int countclass=0;
 	String nameclass;
-	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫
+	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫字元
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t",};
     String keyschar[] = {"case","int", "abstract", "continue", "for", "new", "switch", "assert", "default", 
     	"goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break", 
