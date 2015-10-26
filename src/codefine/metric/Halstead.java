@@ -2,7 +2,7 @@ package codefine.metric;
 import java.util.*;
 import java.util.HashMap;
 //Step1 抓出保留字 
-//Step2 找出特殊符號
+//Step2 找出特殊符號 
 //Step3 剩下的就是使用者的命名
 //line.contains("elseif") = t f  line裡有elseif的話就回傳T或F,不用完全相等
 //line.indexOf("elseif") = 0 1 1 如上
@@ -21,7 +21,7 @@ public class Halstead extends Algorithm {
     	"%=", "&=","^=", "|=", "<<=", ">>=", ">>>=", "--", "!=","=", "*", "/", "%", "!", "==",
 		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>" ,"(",")", "[",  "]", "{","}"}; //保留字、運算子
     String[] SP = {"string",",", ".", ";", "@","\\", "/*", "*/", "\"","0","1","2",
-    	"3","4","5","6","7","8","9","0"	};  //特殊符號;
+    	"3","4","5","6","7","8","9","0"	};  //特殊符號
 	
 	HashMap<String, Integer> operators;
 	HashMap<String, Integer> operands;
