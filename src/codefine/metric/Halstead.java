@@ -1,28 +1,30 @@
 package codefine.metric;
 import java.util.*;
 import java.util.HashMap;
-//Step1 æŠ“å‡ºä¿ç•™å­— 
-//Step2 æ‰¾å‡ºç‰¹æ®Šç¬¦è™Ÿ 
-//Step3 å‰©ä¸‹çš„å°±æ˜¯ä½¿ç”¨è€…çš„å‘½å
-//line.contains("elseif") = t f  lineè£¡æœ‰elseifçš„è©±å°±å›å‚³Tæˆ–F,ä¸ç”¨å®Œå…¨ç›¸ç­‰
-//line.indexOf("elseif") = 0 1 1 å¦‚ä¸Š
+//Step1 §ì¥X«O¯d¦r 
+//Step2 §ä¥X¯S®í²Å¸¹
+//Step3 ³Ñ¤Uªº´N¬O¨Ï¥ÎªÌªº©R¦W
+//line.contains("elseif") = t f  line¸Ì¦³elseifªº¸Ü´N¦^¶ÇT©ÎF,¤£¥Î§¹¥ş¬Ûµ¥
+//line.indexOf("elseif") = 0 1 1 ¦p¤W
 
 public class Halstead extends Algorithm {
 	private double value;
-
-	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //è·³è„«å­—å…ƒ1234444
+	int countclass=0;
+	String nameclass;
+	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //¸õ²æ
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t",};
-    String keyschar[] = {"case","int", "abstract", "continue", "for", "new", "switch", "assert", "default",
+    String keyschar[] = {"case","int", "abstract", "continue", "for", "new", "switch", "assert", "default", 
     	"goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break", 
     	"double","interface", "implements", "protected", "throw", "byte", "else", "import", "public", "throws", 
     	"try", "char", "final", "inrerface", "static", "void", "class", "finally", "long", 
     	"strictfp", "volatile", "const", "float", "native", "super", "while", "String", "echo","++",
     	"*", "+", "-", "<<", "<", "==", "&", "^", "|", "&&","||", "?:", ">=", "+=", "-=", "*=", "/=",":",
     	"%=", "&=","^=", "|=", "<<=", ">>=", ">>>=", "--", "!=","=", "*", "/", "%", "!", "==",
-		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>" ,"(",")", "[",  "]", "{","}"}; //ä¿ç•™å­—ã€é‹ç®—å­
-    String[] SP = {"string",",", ".", ";", "@","\\", "/*", "*/", "\"","0","1","2",
-    	"3","4","5","6","7","8","9","0"	};  //ç‰¹æ®Šç¬¦è™Ÿtest
-	
+		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>",";" ,"(",")", "[",  "]", "{","}"}; //«O¯d¦r¡B¹Bºâ¤l
+    String[] SP = {"string",",", ".", ";", "@","\\", "/*", "*/", "\""};  //¯S®í²Å¸¹;
+    String[] Num = {"0","1","2","3","4","5","6","7","8","9"};
+    int countbig = 0, bigindex = 0;
+    int countsmall = 0, smallindex = 0;
 	HashMap<String, Integer> operators;
 	HashMap<String, Integer> operands;
 	
@@ -32,104 +34,251 @@ public class Halstead extends Algorithm {
 		operands = new HashMap<String, Integer>();
 		for(int i = 0; i < keyschar.length; i++)
 			operators.put(keyschar[i], 0);
+		
 	}
+	
 	public void readLine(String line) {
+		
+		if(line.contains("class")){
+			countclass+=1;
+			String getname = null;
+			String gettest1,gettest2,gettest3; int aa;
+			String gettest4 = "";
+			if((line.contains("<"))||(line.contains(">"))){ //§äclass name
+				gettest1 = line.substring(line.indexOf("<"),line.indexOf(">")+1); //¶i¨Ó<>¸Ì­±
+				gettest1 = gettest1.replace(" ", ""); //ªÅ¥Õ¥ş§R
+				gettest1 = gettest1.replace(",", ", ");//³r¸¹«á­nªÅ¥Õ
+				gettest2 = line.substring(line.indexOf("class")+6,line.indexOf("<"));
+				gettest2 = gettest2.replace(" ", "");
+				getname = gettest2 + gettest1;
+				nameclass = getname;
+				System.out.println("class name:" + nameclass);
+				
+				
+			}
+			else {
+				
+				gettest3 = line;
+				gettest3 = gettest3.substring(gettest3.indexOf("class"),gettest3.indexOf("{"));
+							
+			    String[] tokens= gettest3.split("\\s+"); //³\¦hªÅ¥Õ¤À³Î¦¨¤@­Ó~
+			    for(String token:tokens ){
+			    //	System.out.println(token);
+			    	  gettest4 += token+ " ";
+			    }
+			  
+			    int a1 = gettest4.indexOf(" "); gettest4 = gettest4.substring(a1+1);
+			    int a2 = gettest4.indexOf(" "); gettest4 = gettest4.substring(0,a2);
+			 	getname = gettest4;
+				nameclass = getname;
+				System.out.println("class name:" + nameclass);
+				//getValue();
+				
+			}
+		}
+		 String line3 =line;
+		 String line4 =line;
+		 String line20 = line;
+			 while (line3.contains("{")){
+				 int bigindexx = line3.indexOf('{');
+				 bigindexx = bigindexx +1; 
+				 countbig = countbig + 1;
+				line3 =line3.substring(bigindexx);
+			 }
+		if (countbig != 0){
 		int firs = 0, las = 0, d=0, n1= 0, t = 0;
 		ArrayList<Integer> put = new ArrayList<Integer>(); 
-		line = line.toLowerCase(); // å°å¯«
-		//String[] token = line.split(" "); // é‡ç©ºç™½åˆ‡å‰²
+		line = line.toLowerCase(); // ¤p¼g
+		//String[] token = line.split(" "); // ¹JªÅ¥Õ¤Á³Î
 		if(line != null) {
-			if (line.contains("//")) { // é‡åˆ°è¨»è§£
-                line = line.substring(0, line.indexOf("//"));  // ç§»é™¤è¨»è§£å¾Œé¢çš„æ±è¥¿
-            }
-			line = line.replace(" ", ""); // æ‹¿æ‰æ‰€æœ‰ç©ºæ ¼
+				if (line.contains("//")) { // ¹J¨ìµù¸Ñ
+	                line = line.substring(0, line.indexOf("//"));  // ²¾°£µù¸Ñ«á­±ªºªF¦è
+	            }
+			
+				//³o¸Ì¶}©l¬O°Ï¶ôµù¸Ñ³¡¤À
+				if (line.contains("/*")){   //·í¹J¨ì/*®É ¥u±µ§R°£¾ã¦æ
+					line = line.substring(line.indexOf("/*"));
+					line = line.replace(line, "");
+															
+				} 	
+				else if(line.contains("*/")){ //·íµ{¦¡\½X¤¤¦³ */¤]§R°£
+					line = line.substring(0,line.indexOf("*/")+2);
+					line = line.replace(line, "");
+				}
+				
+				if((line.contains("<"))&&(line.contains(">"))){  //§ä¥X½d«¬°Ï¶ôªº<~> ex.HashMap<String, Integer>
+					int f3,f4;
+					f3 = line.indexOf("<"); //§ì¥X<ªº¦ì¸m
+					f4 = line.indexOf(">"); //§ì¥X>ªº¦ì¸m
+					line=line.substring(f3,f4+1); //HashMap<String, Integer> ÅÜ¦¨ <String, Integer>
+					//System.out.println(line);
+					//System.out.println(line.substring(0,1));  ´ú¸Õ¦Ó¤w
+					line = line.replace(("<")," "); //±N<ÅÜ¦¨ªÅ¥Õ
+					line = line.replace((">")," "); //±N>ÅÜ¦¨ªÅ¥Õ
+					}
+				//line = line.replace(" ", ""); // ®³±¼©Ò¦³ªÅ®æ
+				
 			int keyIndex = 0;			
 			int leftBound = -1;
 			int h = 0;
-			while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0){
-				if(h > 0){
-					put.add(keyIndex + put.get(h-1) + 1);
-					//System.out.println(keyIndex + put.get(h-1) + 1);
-				} else {
-					put.add(keyIndex);
-				}
-				
-				h++;
-				leftBound += keyIndex + 1;
-				
-			}
-			
-			
-			for (t = put.size() - 1; t >= 0; t = t - 2) {
-				//System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
-				String key = line.substring(put.get(t - 1) + 1, put.get(t));
-				
-				if(operands.containsKey(key)) {
-					operands.put(key, operands.get(key) + 1);
-				} else {
-					operands.put(key, 1);
-				}
-				
-				line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
-			}
-		}
-		
-		
-		for(int i = 0; i < keyschar.length; i++) { //å¾ç¬¬ä¸€å€‹ä¿ç•™å­—é–‹å§‹
-			boolean a = line.contains(keyschar[i]); //åˆ¤æ–·lineè£¡æ˜¯å¦æœ‰é€™äº›ä¿ç•™å­—
-			
-			if (a == true){ //å¦‚æœæœ‰
-					if ((operators.get(keyschar[i])) == 0){
-					operators.put(keyschar[i], 1);
-					
-					for (int g = 0; g< escapedchar.length; g++){
-						boolean escaped = line.contains(escapedchar[g]);
-							if (escaped == true){
-								line = line.replace(escapedchar[g], " ");
-							}
-				}
-					}else {
-					operators.put(keyschar[i], operators.get(keyschar[i])+1);
+				while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0){
+					if(h > 0){
+						put.add(keyIndex + put.get(h-1) + 1);
+						//System.out.println(keyIndex + put.get(h-1) + 1);
+					} else {
+						put.add(keyIndex);
 					}
+					h++;
+					leftBound += keyIndex + 1;
+		     	}
+			
+			
+				for (t = put.size() - 1; t >= 0; t = t - 2) {
+					//System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
+					String key = line.substring(put.get(t - 1) + 1, put.get(t));
+					
+					if(operands.containsKey(key)) {
+						operands.put(key, operands.get(key) + 1);
+					} else {
+						operands.put(key, 1);
+					}
+					line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
 				}
-			line = line.replace(keyschar[i], " ");
+			}//¦¹¬°line!=nullªºµ²§À
+		
+		
+		for(int i = 0; i < keyschar.length; i++) { //±q²Ä¤@­Ó«O¯d¦r¶}©l
+			
+			int here= 0 ;
+			while (line20.contains(keyschar[i])){
+				operators.put(keyschar[i], operators.get(keyschar[i])+1);
+				here = line20.indexOf(keyschar[i]);
+				here = here +1 ;
+				line20 = line20.substring(here);
+			}
+			
+			
+			
+			/*boolean a = line.contains(keyschar[i]); //§PÂ_line¸Ì¬O§_¦³³o¨Ç«O¯d¦r
+			String line5 = line;
+			int abc =0;
+            if (a == true){ //¦pªG¦³
+                    if ((operators.get(keyschar[i])) == 0){
+                    operators.put(keyschar[i], 1);
+                    int checkresumall = 0;
+                  for (int ii = 0; ii < keyschar.length; ii++){
+                	   String line2;
+                       line2 = line;
+                    	int checkresum = 0;
+                    	
+                    	while (line2.contains(keyschar[ii])){
+                    		int checkre =  0;
+                    		checkre = line2.indexOf(keyschar[ii]);
+                    		checkre = checkre + 1;
+                    		checkresum =checkresum + 1;
+                    		 checkresumall = checkresumall + checkresum;
+                    		line2= line2.substring(checkre);
+                    	}
+                    	operators.put(keyschar[ii], checkresum);
+                    }
+                    
+                    }else {
+                    operators.put(keyschar[i], operators.get(keyschar[i])+1);
+                    }
+                }*/
 		}
 		
+		
+		for(int replacekey = 0 ; replacekey < keyschar.length; replacekey ++){
+            line = line.replace(keyschar[replacekey], " ");
+        }
 		
 		for (int b = 0; b < SP.length; b++){
 			boolean c = line.contains(SP[b]);
 			line = line.replace(SP[b], " ");
 		}
-		
-		//System.out.println(line);
-	    /*String[] token = line.split(" ");
-		for (String tokens: token){
-			System.out.println(token);
-		}*/
-		
 		String[] token = line.split("\\s+");
-		
-		for(int xx = 0; xx < token.length; xx++) { //[åˆ—å°å‡ºé™£åˆ—]
+		for(int xx = 0; xx < token.length; xx++) { //[¦C¦L¥X°}¦C]
+			for(int xy = 0; xy < Num.length ; xy++){ //ÀË¬dtoken¦r¦êªº²Ä¤@­Ó¬O§_¬°¼Æ¦r,¦pªG¬O´N§R°£
+				if(token[xx].equals("")) continue;
+				if((token[xx].substring(0, 1)).equals(Num[xy])){
+					token[xx] = token[xx].replace(token[xx],"");
+				}
+			}
 			if(token[xx].equals("")) continue;
 			if(operands.containsKey(token[xx])) {
-				operands.put(token[xx], operands.get(token[xx]) + 1);
-			} else {
-				operands.put(token[xx], 1);
+					operands.put(token[xx], operands.get(token[xx]) + 1);
+				} else {
+					operands.put(token[xx], 1);
+				}
+		}
+		 while (line4.contains("}")){
+			  smallindex = line4.indexOf('}');
+			 smallindex = smallindex +1; 
+			 countbig = countbig - 1;
+			line4 =line4.substring(smallindex);
+		 }	
+		}
+		if ((countbig == 0) && (operands.size() != 0)){
+		
+			System.out.println(operators.keySet());
+			System.out.println(operators.values());
+			System.out.println(operands.keySet());
+			System.out.println(operands.values());
+			int n1 = 0 , N1 = 0;
+			int n2 = 0 , N2 = 0;
+			
+			for (int a = 0; a < keyschar.length; a++ ){
+				if ((operators.get(keyschar[a])) > 0) {
+					n2 = n2 + 1 ;
+					N2 = operators.get(keyschar[a]) + N2;
+				}
 			}
 			
+		    n1 = operands.size();
+			for (Object key: operands.keySet()){
+				N1 += operands.get(key); 
+			}
+		
+			 System.out.println("¤£¦Pªº¹Bºâ¤l­Ó¼Æ: n2 :"+ n2 );
+		        System.out.println("©Ò¦³¹Bºâ¤l¦X­p¥X²{ªº¦¸¼Æ: N2 :"+ N2 );
+		        System.out.println("¤£¦Pªº¹Bºâ¤¸­Ó¼Æ: n1 :"+ n1 );
+		        System.out.println("©Ò¦³¹Bºâ¤¸¦X­p¥X²{ªº¦¸¼Æ: N1 :"+ N1);
+		        System.out.println("µ{¦¡µü·J¼Æ¡]Program vocabulary¡^¡G n = "+ (n1+n2));
+		        System.out.println("µ{¦¡ªø«×¡]Program length¡^¡G N = "+ (N1+N2));
+		        System.out.println("®e¶q¡]Volume¡^ V =  "+ (N1+N2) * Math.log(n1+n2));
+		        if (n2 == 0){
+		            System.out.println("Ãø«×(Difficulty¡^ D =  "+ (n1 / 2));
+		            System.out.println("ºë¤O¡]Effort¡^ E =  "+ ((N1+N2) * Math.log(n1+n2))*((n1 / 2)));
+		        }else{
+		        System.out.println("Ãø«×(Difficulty¡^ D =  "+ (n1 / 2) * (N2 / n2));
+		        System.out.println("ºë¤O¡]Effort¡^ E =  "+ ((N1+N2) * Math.log(n1+n2))*((n1 / 2) * (N2 / n2)));
+		        }
+		        double NN =0;
+		        NN = n1* (Math.log(n2)) + n2* Math.log(n2);
+		        System.out.println("­pºâµ{¦¡ªø«×¡]Calculated program length¡^¡GN^ " + NN);
+		        for(int i = 0; i < keyschar.length; i++){
+					operators.put(keyschar[i], 0);
+			}
+		        operands.clear();
+		        System.out.println("");
 		}
+		
 	}
+		
 	
+	
+
 	public double getValue() {
-		System.out.println(operators.keySet());
+		/*System.out.println(operators.keySet());
 		System.out.println(operators.values());
 		System.out.println(operands.keySet());
-		System.out.println(operands.values());
-		int n1 = 0 , N1 = 0;
+		System.out.println(operands.values());*/
+		/*int n1 = 0 , N1 = 0;
 		int n2 = 0 , N2 = 0;
 		
 		for (int a = 0; a < keyschar.length; a++ ){
-			if ((operators.get(keyschar[a])) != 0) {
+			if ((operators.get(keyschar[a])) > 0) {
 				n2 = n2 + 1 ;
 				N2 = operators.get(keyschar[a]) + N2;
 			}
@@ -140,18 +289,23 @@ public class Halstead extends Algorithm {
 			N1 += operands.get(key); 
 		}
 	
-		System.out.println("ä¸åŒçš„é‹ç®—å…ƒå€‹æ•¸: n2 :"+ n2 );
-		System.out.println("æ‰€æœ‰é‹ç®—å…ƒåˆè¨ˆå‡ºç¾çš„æ¬¡æ•¸: N2 :"+ N2 );
-		System.out.println("ä¸åŒçš„é‹ç®—å­å€‹æ•¸: n1 :"+ n1 );
-		System.out.println("æ‰€æœ‰é‹ç®—å­åˆè¨ˆå‡ºç¾çš„æ¬¡æ•¸: N1 :"+ N1);
-		System.out.println("ç¨‹å¼è©å½™æ•¸ï¼ˆProgram vocabularyï¼‰ï¼š n = "+ (n1+n2));
-		System.out.println("ç¨‹å¼é•·åº¦ï¼ˆProgram lengthï¼‰ï¼š N = "+ (N1+N2));
-		System.out.println("å®¹é‡ï¼ˆVolumeï¼‰ V =  "+ (N1+N2) * Math.log(n1+n2));
-		System.out.println("é›£åº¦(Difficultyï¼‰ D =  "+ (n1 / 2) * (N2 / n2));
-		System.out.println("ç²¾åŠ›ï¼ˆEffortï¼‰ E =  "+ ((N1+N2) * Math.log(n1+n2))*((n1 / 2) * (N2 / n2)));
-		double NN =0;
-		NN = n1* (Math.log(n2)) + n2* Math.log(n2);
-		System.out.println("è¨ˆç®—ç¨‹å¼é•·åº¦ï¼ˆCalculated program lengthï¼‰ï¼šN^ " + NN);
-		return value;
+		 System.out.println("¤£¦Pªº¹Bºâ¤l­Ó¼Æ: n2 :"+ n2 );
+	        System.out.println("©Ò¦³¹Bºâ¤l¦X­p¥X²{ªº¦¸¼Æ: N2 :"+ N2 );
+	        System.out.println("¤£¦Pªº¹Bºâ¤¸­Ó¼Æ: n1 :"+ n1 );
+	        System.out.println("©Ò¦³¹Bºâ¤¸¦X­p¥X²{ªº¦¸¼Æ: N1 :"+ N1);
+	        System.out.println("µ{¦¡µü·J¼Æ¡]Program vocabulary¡^¡G n = "+ (n1+n2));
+	        System.out.println("µ{¦¡ªø«×¡]Program length¡^¡G N = "+ (N1+N2));
+	        System.out.println("®e¶q¡]Volume¡^ V =  "+ (N1+N2) * Math.log(n1+n2));
+	        if (n2 == 0){
+	            System.out.println("Ãø«×(Difficulty¡^ D =  "+ (n1 / 2));
+	            System.out.println("ºë¤O¡]Effort¡^ E =  "+ ((N1+N2) * Math.log(n1+n2))*((n1 / 2)));
+	        }else{
+	        System.out.println("Ãø«×(Difficulty¡^ D =  "+ (n1 / 2) * (N2 / n2));
+	        System.out.println("ºë¤O¡]Effort¡^ E =  "+ ((N1+N2) * Math.log(n1+n2))*((n1 / 2) * (N2 / n2)));
+	        }
+	        double NN =0;
+	        NN = n1* (Math.log(n2)) + n2* Math.log(n2);
+	        System.out.println("­pºâµ{¦¡ªø«×¡]Calculated program length¡^¡GN^ " + NN);*/
+	        return value;
 	}
 }			
