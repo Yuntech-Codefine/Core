@@ -2,7 +2,7 @@ package codefine.metric;
 import java.util.*;
 import java.util.HashMap;
 //Step1 抓出保留字 
-//Step2 找出特殊符號fffffddd
+//Step2 找出特殊符號
 //Step3 剩下的就是使用者的命名
 //line.contains("elseif") = t f  line裡有elseif的話就回傳T或F,不用完全相等
 //line.indexOf("elseif") = 0 1 1 如上
