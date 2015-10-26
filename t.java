@@ -40,4 +40,5 @@ a = " qqq "
             }
         }
     }
-}public    class                                    tedst     <   tttt,    ff ,df    ,fff >   {}
+}
+public    class                                    tedst     <   tttt,    ff ,df    ,fff >   {}

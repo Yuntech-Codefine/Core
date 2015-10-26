@@ -7,8 +7,46 @@ import java.util.HashMap;
 //line.contains("elseif") = t f  line裡有elseif的話就回傳T或F,不用完全相等
 //line.indexOf("elseif") = 0 1 1 如上
 
+class HalsteadKeys {
+	private String className;
+	private HashMap<String, Integer> operators, operands;
+	private int N1, N2, n1, n2;
+	
+	public HalsteadKeys(String cn, HashMap<String, Integer> operators, HashMap<String, Integer> operands, int N1, int N2, int n1, int n2) {
+		className = cn;
+		this.operators = operators;
+		this.operands = operands;
+		this.N1 = N1;
+		this.N2 = N2;
+		this.n1 = n1;
+		this.n2 = n2;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public HashMap<String, Integer> getOperators() {
+		return operators;
+	}
+	public HashMap<String, Integer> getOperands() {
+		return operands;
+	}
+	public int getN1() {
+		return N1;
+	}
+	public int getN2() {
+		return N2;
+	}
+	public int getn1() {
+		return n1;
+	}
+	public int getn2() {
+		return n2;
+	}
+}
+
 public class Halstead extends Algorithm {
 	private double value;
+	
 	int countclass=0;
 	String nameclass;
 	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫字元
@@ -27,6 +65,7 @@ public class Halstead extends Algorithm {
     int countsmall = 0, smallindex = 0;
 	HashMap<String, Integer> operators;
 	HashMap<String, Integer> operands;
+	ArrayList<HalsteadKeys> Results = new ArrayList<HalsteadKeys>(); 
 	
 	public Halstead() {
 		value = 0;
@@ -239,8 +278,10 @@ public class Halstead extends Algorithm {
 			for (Object key: operands.keySet()){
 				N1 += operands.get(key); 
 			}
-		
+
+			
 			 System.out.println("不同的運算子個數: n2 :"+ n2 );
+			 
 		        System.out.println("所有運算子合計出現的次數: N2 :"+ N2 );
 		        System.out.println("不同的運算元個數: n1 :"+ n1 );
 		        System.out.println("所有運算元合計出現的次數: N1 :"+ N1);
@@ -260,6 +301,9 @@ public class Halstead extends Algorithm {
 		        for(int i = 0; i < keyschar.length; i++){
 					operators.put(keyschar[i], 0);
 			}
+				HalsteadKeys halsteadKeys = new HalsteadKeys(nameclass, operators, operands, N1, N2, n1, n2);
+				Results.add(halsteadKeys);
+				
 		        operands.clear();
 		        System.out.println("");
 		}
@@ -269,43 +313,9 @@ public class Halstead extends Algorithm {
 	
 	
 
-	public double getValue() {
-		/*System.out.println(operators.keySet());
-		System.out.println(operators.values());
-		System.out.println(operands.keySet());
-		System.out.println(operands.values());*/
-		/*int n1 = 0 , N1 = 0;
-		int n2 = 0 , N2 = 0;
-		
-		for (int a = 0; a < keyschar.length; a++ ){
-			if ((operators.get(keyschar[a])) > 0) {
-				n2 = n2 + 1 ;
-				N2 = operators.get(keyschar[a]) + N2;
-			}
-		}
-		
-	    n1 = operands.size();
-		for (Object key: operands.keySet()){
-			N1 += operands.get(key); 
-		}
-	
-		 System.out.println("不同的運算子個數: n2 :"+ n2 );
-	        System.out.println("所有運算子合計出現的次數: N2 :"+ N2 );
-	        System.out.println("不同的運算元個數: n1 :"+ n1 );
-	        System.out.println("所有運算元合計出現的次數: N1 :"+ N1);
-	        System.out.println("程式詞彙數（Program vocabulary）： n = "+ (n1+n2));
-	        System.out.println("程式長度（Program length）： N = "+ (N1+N2));
-	        System.out.println("容量（Volume） V =  "+ (N1+N2) * Math.log(n1+n2));
-	        if (n2 == 0){
-	            System.out.println("難度(Difficulty） D =  "+ (n1 / 2));
-	            System.out.println("精力（Effort） E =  "+ ((N1+N2) * Math.log(n1+n2))*((n1 / 2)));
-	        }else{
-	        System.out.println("難度(Difficulty） D =  "+ (n1 / 2) * (N2 / n2));
-	        System.out.println("精力（Effort） E =  "+ ((N1+N2) * Math.log(n1+n2))*((n1 / 2) * (N2 / n2)));
-	        }
-	        double NN =0;
-	        NN = n1* (Math.log(n2)) + n2* Math.log(n2);
-	        System.out.println("計算程式長度（Calculated program length）：N^ " + NN);*/
-	        return value;
+	public String getValue() {
+		Results.get(0);
+		System.out.println("不同的運算子個數: n2 :" );
+		return "";
 	}
 }			
