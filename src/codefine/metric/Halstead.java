@@ -199,7 +199,7 @@ public class Halstead extends Algorithm {
 		}
 		String[] token = line.split("\\s+");
 		for(int xx = 0; xx < token.length; xx++) { //[列印出陣列]
-			for(int xy = 0; xy < Num.length ; xy++){ //檢查token字串的第一個是否為數字,如果是就刪除
+			for(int xy = 0; xy < Num.length ; xy++){ //檢查token字串的第一個是否為數字，如果是就刪除
 				if(token[xx].equals("")) continue;
 				if((token[xx].substring(0, 1)).equals(Num[xy])){
 					token[xx] = token[xx].replace(token[xx],"");
