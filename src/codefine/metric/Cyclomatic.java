@@ -16,7 +16,7 @@ class MethodModel {
 
 class ClassModel {
 	private ArrayList<MethodModel> methodList;
-	String mName;
+	String className;
 	
 	ClassModel () {
 		methodList = new ArrayList<MethodModel>();
@@ -86,7 +86,7 @@ public class Cyclomatic extends Algorithm {
 				combinedLine = line;
 				lastIndex = 0;
 			}
-			//System.out.println(combinedLine);
+			
 			int i;
 			
 			for(i = lastIndex; i < combinedLine.length(); i++) {
@@ -95,7 +95,7 @@ public class Cyclomatic extends Algorithm {
 					
 					if(brackets == 1) {
 						ClassModel classModel = new ClassModel();
-						classModel.mName = searchClassName(combinedLine, i);
+						classModel.className = searchClassName(combinedLine, i);
 						classList.add(classModel);
 					} else if(brackets == 2) {
 						classList.get(classList.size() - 1).addMethod(new MethodModel(searchMethodName(combinedLine, i)));
@@ -259,21 +259,23 @@ public class Cyclomatic extends Algorithm {
     }
     
 	public String getValue() {
-		JSONArray jsonArr = new JSONArray();
+		JSONObject jsonClass = new JSONObject();
 		
 		for(int i = 0; i < classList.size(); i++) {
+			
+			JSONArray jsonMethods = new JSONArray();
 			for(int j = 0; j < classList.get(i).size(); j++) {
-				JSONObject jsonObj = new JSONObject();
+				JSONObject jsonMethod = new JSONObject();
 				int cc = classList.get(i).getMethod(j).cc;
 				
-				jsonObj.put("Method Name", classList.get(i).getMethod(j).name);
-				jsonObj.put("Cyclomatic Complexity", cc);
-				jsonObj.put("Risk Level", getLevel(cc));
-				
-				jsonArr.put(jsonObj);
+				jsonMethod.put("Method Name", classList.get(i).getMethod(j).name);
+				jsonMethod.put("Cyclomatic Complexity", cc);
+				jsonMethod.put("Risk Level", getLevel(cc));
+				jsonMethods.put(jsonMethod);
 			}
+			jsonClass.put(classList.get(i).className, jsonMethods);
 		}	
 		
-		return jsonArr.toString();
+		return jsonClass.toString();
 	}
 }
