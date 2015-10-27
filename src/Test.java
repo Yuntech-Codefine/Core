@@ -32,7 +32,8 @@ public class Test {
 			}
 			
 			bufferedReader.close();
-			System.out.println(cyclomatic.getValue());
+			//System.out.println(cyclomatic.getValue());
+			System.out.println(halstead.getValue());
 			//Reader reader = new Reader();
 			//reader.read(connection);
 			//System.out.println(reader.getCyclomatic());
