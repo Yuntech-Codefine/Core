@@ -2,6 +2,9 @@ package codefine.metric;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 class MethodModel {
 	String name;
 	int cc;
@@ -25,6 +28,10 @@ class ClassModel {
 	
 	int size() {
 		return methodList.size();
+	}
+	
+	MethodModel getMethod(int index) {
+		return methodList.get(index);
 	}
 	
 	MethodModel getLast() {
@@ -251,7 +258,22 @@ public class Cyclomatic extends Algorithm {
         }
     }
     
-	//public int getValue(int index) {
-		//return classList.get(index);
-	//}
+	public String getValue() {
+		JSONArray jsonArr = new JSONArray();
+		
+		for(int i = 0; i < classList.size(); i++) {
+			for(int j = 0; j < classList.get(i).size(); j++) {
+				JSONObject jsonObj = new JSONObject();
+				int cc = classList.get(i).getMethod(j).cc;
+				
+				jsonObj.put("Method Name", classList.get(i).getMethod(j).name);
+				jsonObj.put("Cyclomatic Complexity", cc);
+				jsonObj.put("Risk Level", getLevel(cc));
+				
+				jsonArr.put(jsonObj);
+			}
+		}	
+		
+		return jsonArr.toString();
+	}
 }
