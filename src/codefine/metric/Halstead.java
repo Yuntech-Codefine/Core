@@ -324,8 +324,15 @@ public class Halstead extends Algorithm {
 			
 			
 			jsonObj.put("Class Name", Results.get(i).getClassName());
-			jsonObj.put("N1", Results.get(i).getN1());
 			jsonArr.put(jsonObj);
+			jsonObj.put("N1", Results.get(i).getN1());
+			jsonObj.put("n1", Results.get(i).getn1());
+			jsonObj.put("N2", Results.get(i).getN2());
+			jsonObj.put("n2", Results.get(i).getn2());
+			jsonObj.put("程式詞彙數（Program vocabulary）： n = " ,(Results.get(i).getn1())+(Results.get(i).getn2()));
+			jsonObj.put("程式長度（Program length）： N = " ,(Results.get(i).getN1())+(Results.get(i).getN2()));
+			jsonObj.put("容量（Volume） V =   " ,(Results.get(i).getN1())+(Results.get(i).getN2())* Math.log((Results.get(i).getn1())+(Results.get(i).getn2())));
+			
 		}	
 		
 		return jsonArr.toString();
