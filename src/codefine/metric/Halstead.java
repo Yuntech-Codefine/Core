@@ -42,7 +42,7 @@ class HalsteadKeys {
 }
 
 public class Halstead extends Algorithm {
-	
+	ArrayList<Integer> put = new ArrayList<Integer>(); 
 	String nameclass;
 	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫字元
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t",};
@@ -77,7 +77,6 @@ public class Halstead extends Algorithm {
 		if(fline.contains("class")) {
 			countclass+=1;
 			String gettest1,gettest2,gettest3;
-			
 			gettest3 = fline.substring(fline.indexOf("class"),fline.indexOf("{"));
 			System.out.println(gettest3);
 			if((fline.contains("<"))||(fline.contains(">"))){ //找class name
@@ -117,7 +116,6 @@ public class Halstead extends Algorithm {
 		
 		if (countbig != 0) {
 			int t = 0;
-			ArrayList<Integer> put = new ArrayList<Integer>(); 
 			line = line.toLowerCase(); // 小寫
 			//String[] token = line.split(" "); // 遇空白切割
 			
@@ -135,14 +133,7 @@ public class Halstead extends Algorithm {
 					line = line.replace(line, "");
 				}
 				
-				if((line.contains("<")) && (line.contains(">"))) {  //找出範型區塊的<~> ex.HashMap<String, Integer>
-					int f3, f4;
-					f3 = line.indexOf("<"); //抓出<的位置
-					f4 = line.indexOf(">"); //抓出>的位置
-					line = line.substring(f3,f4+1); //HashMap<String, Integer> 變成 <String, Integer>
-					line = line.replace(("<")," "); //將<變成空白
-					line = line.replace((">")," "); //將>變成空白
-				}
+			
 				//line = line.replace(" ", ""); // 拿掉所有空格
 				
 				int keyIndex = 0;			
@@ -158,17 +149,19 @@ public class Halstead extends Algorithm {
 					h++;
 					leftBound += keyIndex + 1;
 		     	}
-				
-				for (t = put.size() - 1; t >= 0; t = t - 2) {
-					//System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
-					String key = line.substring(put.get(t - 1) + 1, put.get(t));
+				if (t != 0){
 					
-					if(operands.containsKey(key)) {
-						operands.put(key, operands.get(key) + 1);
-					} else {
-						operands.put(key, 1);
+					for (t = put.size() - 1; t >= 0; t = t - 2) {
+						//System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
+						String key = line.substring(put.get(t - 1) + 1, put.get(t));
+						
+						if(operands.containsKey(key)) {
+							operands.put(key, operands.get(key) + 1);
+						} else {
+							operands.put(key, 1);
+						}
+						line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
 					}
-					line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
 				}
 			} //此為line!=null的結尾
 		
