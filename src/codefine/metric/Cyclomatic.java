@@ -43,11 +43,12 @@ class ClassModel {
 
 public class Cyclomatic extends Algorithm {
 	
+	private boolean isBlockComment = false;
+	private boolean isNotMethod = false;
 	private int value;
 	private int brackets = 0;
 	private String combinedLine = "";
 	private int lastIndex;
-	private boolean isQuotes;
 	private ArrayList<ClassModel> classList;
 	
 	String[] operators = { // 順序很重要，已排好順序
@@ -57,26 +58,24 @@ public class Cyclomatic extends Algorithm {
 		"~", "<<", ">>", ">>>", // 位元運算子
 		"<", ">", "<=", ">=", "==", "!=", "instanceof", // 關係運算子
 	};
-	String[] SP = { // 其他特殊符號
-		",", ".", ";", "@",
-		"\\", "/*", "*/", "\"",
-		"(", ")", "[", "]", "{", "}"
-	};
 	String[] keywords = {"if", "for", "while", "case", "default", "continue", "&&", "||", "&", "|" };
 	
 	public Cyclomatic() {
 		classList = new ArrayList<ClassModel>();
+		value = 1;
 	}
 	
 	public void readLine(String line) {
-		isQuotes = false;
-		
 		if(!line.equals("")) {
+			line = line.replaceAll("\".*\"", "");
+			line = line.replaceAll("\'.*\'", "");
+			
 			if(line.contains("//")) // 遇到註解
                line = line.substring(0, line.indexOf("//"));
 			
 			line = line.replace("\t", ""); // 取代定位點
 			if(line.trim().equals("")) return; // 若沒東西了就跳下一行
+			
 			
 			if(brackets <= 2) {
 				combinedLine += line;
@@ -86,45 +85,62 @@ public class Cyclomatic extends Algorithm {
 			}
 			
 			int i;
-			boolean isNotMethod = false;
 			
 			for(i = lastIndex; i < combinedLine.length(); i++) {
-				if(combinedLine.charAt(i) == '{') {
-					
-					int lastEnding = combinedLine.substring(0, i).lastIndexOf(';');
-					
-					if(lastEnding < 0) {
-						if(!combinedLine.substring(combinedLine.lastIndexOf('{'), i).contains("="))
-							brackets++;
-						else
-							isNotMethod = true;
-					} else {
-						if(!combinedLine.substring(lastEnding, i).contains("="))
-							brackets++;
-						else
-							isNotMethod = true;
+				if(combinedLine.charAt(i) == '/') {
+					if(i + 1 < combinedLine.length()) {
+						 if(combinedLine.charAt(i + 1) == '*') {
+							 isBlockComment = true;
+						 }
 					}
+				}
+				
+				if(combinedLine.charAt(i) == '*') {
+					if(i + 1 < combinedLine.length()) {
+						 if(combinedLine.charAt(i + 1) == '/') {
+							 isBlockComment = false;
+						 }
+					}
+				}
+				if(isBlockComment) continue;
+				
+				if(combinedLine.charAt(i) == '{') {
+					brackets++;
 					
 					if(brackets == 1) {
 						ClassModel classModel = new ClassModel();
 						classModel.className = searchClassName(combinedLine, i);
 						classList.add(classModel);
 					} else if(brackets == 2) {
-						classList.get(classList.size() - 1).addMethod(new MethodModel(searchMethodName(combinedLine, i)));
+						int lastEnding = combinedLine.substring(0, i).lastIndexOf(';');
+						
+						if(lastEnding < 0) { // 前面都沒有分號;
+							if(!combinedLine.substring(combinedLine.lastIndexOf('{'), i).contains("="))
+								classList.get(classList.size() - 1).addMethod(new MethodModel(searchMethodName(combinedLine, i)));
+							else
+								isNotMethod = true;
+						} else {
+							if(!combinedLine.substring(lastEnding, i).contains("="))
+								classList.get(classList.size() - 1).addMethod(new MethodModel(searchMethodName(combinedLine, i)));
+							else {
+								isNotMethod = true;
+							}
+						}
 					}
 				} else if(combinedLine.charAt(i) == '}') {
-					if(!isNotMethod)
-						brackets--;
-					isNotMethod = false;
+					brackets--;
+					
+					if(brackets == 1 && !isNotMethod) {
+						classList.get(classList.size() - 1).getLast().cc = value;
+						value = 1; // cc從1開始加計
+					} else if(brackets == 1) {
+						isNotMethod = false;
+					}
 				}
-				
-				if(combinedLine.charAt(i) == '"') isQuotes = !isQuotes;
 				
 				if(brackets >= 2) {
 					for(String key : keywords) {
 						i = keyCount(combinedLine, key, i);
-						classList.get(classList.size() - 1).getLast().cc = value;
-						value = 1; // cc從1開始加計
 					}
 				}
 			}
@@ -148,7 +164,7 @@ public class Cyclomatic extends Algorithm {
 				case "case":
 				case "default":
 				default:
-					if(!isQuotes) value++;
+					value++;
 					break;
 			}
 			return currentIndex + index;
@@ -159,8 +175,8 @@ public class Cyclomatic extends Algorithm {
 	
 	private String searchClassName(String line, int index) {
 		String result = "";
-		int ci = line.substring(0, index).lastIndexOf("class");
 		
+		int ci = line.substring(0, index).lastIndexOf("class ");
 		if(ci >= 0) {
 			int ei = line.substring(ci, index).indexOf("<");
 			int si = line.substring(ci, index).indexOf(">");
@@ -219,11 +235,21 @@ public class Cyclomatic extends Algorithm {
 			}
 			
 			if(param.substring(i2).contains(",")) { // 後面還有參數
-				paramKeys += param.substring(0, i1).trim() + formatParam(param.substring(i1, i2 + 1)) + ", ";
-				param = param.substring(param.substring(i2).indexOf(",") + i2 + 1);
-			} else if (i1 != 0 && i2 >= i1){ // 找到最後一個參數了
-				paramKeys += param.substring(0, i1).trim() + formatParam(param.substring(i1, i2 + 1));
-				param = param.substring(i2 + 1).trim();
+				int tmp = i1;
+				while(param.charAt(tmp - 1) == ' ') tmp--;
+				paramKeys += param.substring(0, tmp).trim() + formatParam(param.substring(i1, i2 + 1).trim()) + ", ";
+				param = param.substring(param.substring(i2).indexOf(",") + i2 + 1).trim();
+			} else if(!param.trim().equals("")){ // 找到最後一個參數了
+				if(i1 != 0 && i2 >= i1) {
+					paramKeys += param.substring(0, i1).trim() + formatParam(param.substring(i1, i2 + 1).trim());
+				} else {
+
+					int k = 0;
+					while(param.charAt(k) == ' ') k++;
+					int k2 = param.substring(k).indexOf(" ");
+					paramKeys += param.substring(k, k + k2);
+				}
+				break;
 			}
 			
 		} while(i1 != 0 && i2 != 0);
@@ -235,14 +261,17 @@ public class Cyclomatic extends Algorithm {
 		else
 			j++;
 		
-		int tmp = line.substring(0, index).lastIndexOf("{");
+		int tmp1 = line.substring(0, index).lastIndexOf("{");
+		int tmp2 = line.substring(0, index).lastIndexOf("}");
+		int tmp3 = line.substring(0, index).lastIndexOf(";");
+		int tmp = Math.max(Math.max(tmp1, tmp2), tmp3);
+		
 		while(line.charAt(tmp + 1) == ' ') tmp++;
 		String mAttrs[] = line.substring(0, index).substring(tmp + 1, j).split(" +");
 		for(String attr : mAttrs)
 			result += attr + " ";
 		
 		result += "(" + paramKeys + ")";
-		
 		return result;
 	}
 	
