@@ -101,8 +101,7 @@ public class Halstead extends Algorithm {
 	
 	}
 	public void readLine(String line) {
-		
-		
+		String line2 = line;
 		String line3 = line;
 		String line4 = line;
 		String line20 = line;
@@ -110,6 +109,7 @@ public class Halstead extends Algorithm {
 			int xxxx = line3.indexOf("\"");
 			xxxx = xxxx + 1;
 			line3 = line3.substring(xxxx);
+			line2 = line2.substring(0,xxxx);
 			for (int aaaa = 0; aaaa <line3.length(); aaaa++){
 				if ((line3.charAt(aaaa))== '\"'){
 					break;
@@ -119,6 +119,8 @@ public class Halstead extends Algorithm {
 				}
 			}
 		}
+		
+		
 		while (line3.contains("{")) {
 			int bigindexx = line3.indexOf("{");
 			if (countbig == 0){
@@ -134,6 +136,7 @@ public class Halstead extends Algorithm {
 			}
 			
 			line3 = line3.substring(bigindexx);
+			System.out.println();
 		}
 		
 		if (countbig != 0) {
@@ -154,6 +157,8 @@ public class Halstead extends Algorithm {
 					line = line.substring(0,line.indexOf("*/")+2);
 					line = line.replace(line, "");
 				}
+				
+				
 				
 			
 				//line = line.replace(" ", ""); // 拿掉所有空格
@@ -257,7 +262,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
-		System.out.println(countbig);
+	
 	}
 	
 	public String getValue() {
