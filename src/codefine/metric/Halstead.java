@@ -108,9 +108,18 @@ public class Halstead extends Algorithm {
 	
 		while (line3.contains("{")) {
 			int bigindexx = line3.indexOf('{');
-			bigindexx = bigindexx +1; 
-			countbig = countbig + 1;
-			getname(line);
+			if (countbig == 0){
+				bigindexx = bigindexx +1; 
+				countbig = countbig + 1;
+				if (countbig == 1){
+				getname(line);
+				}
+			}else{
+				countbig = countbig + 1;
+				bigindexx = bigindexx +1; 
+				
+			}
+			
 			line3 = line3.substring(bigindexx);
 		}
 		
