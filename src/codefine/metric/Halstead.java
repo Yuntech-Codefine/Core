@@ -68,7 +68,7 @@ public class Halstead extends Algorithm {
 	public Halstead() {
 		operators = new HashMap<String, Integer>();
 		operands = new HashMap<String, Integer>();
-		
+		System.out.println("'");
 		for(int i = 0; i < keyschar.length; i++)
 			operators.put(keyschar[i], 0);
 	}
@@ -98,16 +98,29 @@ public class Halstead extends Algorithm {
 				System.out.println("2. "+nameclass);
 			}
 		}
-	}
 	
+	}
 	public void readLine(String line) {
+		
 		
 		String line3 = line;
 		String line4 = line;
 		String line20 = line;
-	
+		if (line3.contains("\"")){
+			int xxxx = line3.indexOf("\"");
+			xxxx = xxxx + 1;
+			line3 = line3.substring(xxxx);
+			for (int aaaa = 0; aaaa <line3.length(); aaaa++){
+				if ((line3.charAt(aaaa))== '\"'){
+					break;
+				}
+				if (line3.contains("{")){
+					line3 = line3.replace('{',' ');
+				}
+			}
+		}
 		while (line3.contains("{")) {
-			int bigindexx = line3.indexOf('{');
+			int bigindexx = line3.indexOf("{");
 			if (countbig == 0){
 				bigindexx = bigindexx +1; 
 				countbig = countbig + 1;
@@ -213,7 +226,7 @@ public class Halstead extends Algorithm {
 			}
 			
 			while (line4.contains("}")) {
-				smallindex = line4.indexOf('}');
+				smallindex = line4.indexOf("}");
 				smallindex = smallindex +1; 
 				countbig = countbig - 1;
 				line4 = line4.substring(smallindex);
@@ -244,6 +257,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
+		System.out.println(countbig);
 	}
 	
 	public String getValue() {
