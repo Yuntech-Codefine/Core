@@ -73,47 +73,45 @@ public class Halstead extends Algorithm {
 			operators.put(keyschar[i], 0);
 	}
 	
-	public void readLine(String line) {
-		
-		if(line.contains("class")) {
+	public void getname(String fline){
+		if(fline.contains("class")) {
 			countclass+=1;
-			String getname = null;
-			String gettest1,gettest2,gettest3;;
-			String gettest4 = "";
-			if((line.contains("<"))||(line.contains(">"))){ //找class name
-				gettest1 = line.substring(line.indexOf("<"),line.indexOf(">")+1); //進來<>裡面
+			String gettest1,gettest2,gettest3;
+			
+			gettest3 = fline.substring(fline.indexOf("class"),fline.indexOf("{"));
+			System.out.println(gettest3);
+			if((fline.contains("<"))||(fline.contains(">"))){ //找class name
+				gettest1 = fline.substring(fline.indexOf("<"),fline.indexOf(">")+1); //進來<>裡面
 				gettest1 = gettest1.replace(" ", ""); //空白全刪
 				gettest1 = gettest1.replace(",", ", ");//逗號後要空白
-				gettest2 = line.substring(line.indexOf("class")+6,line.indexOf("<"));
-				gettest2 = gettest2.replace(" ", "");
-				getname = gettest2 + gettest1;
-				nameclass = getname;
-			} else {
-				
-				gettest3 = line;
-				gettest3 = gettest3.substring(gettest3.indexOf("class"),gettest3.indexOf("{"));
-							
-			    String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
+				gettest3=fline.substring(fline.indexOf("class")+6,fline.indexOf("<"));
+				gettest3=gettest3.replace(" ","");
+				nameclass = gettest3 + gettest1;
+				System.out.println("1. "+nameclass);
+			}else{
+				String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
 			    for(String token:tokens ){
-			    	  gettest4 += token+ " ";
-			    }
-			  
-			    int a1 = gettest4.indexOf(" "); gettest4 = gettest4.substring(a1+1);
-			    int a2 = gettest4.indexOf(" "); gettest4 = gettest4.substring(0,a2);
-			 	getname = gettest4;
-				nameclass = getname;
+			    	  gettest3 += token+ " ";
+			     }
+			    int a1 = gettest3.indexOf(" "); gettest3 = gettest3.substring(a1+1);
+			    int a2 = gettest3.indexOf(" "); gettest3 = gettest3.substring(0,a2);
+			    nameclass = gettest3;
+				System.out.println("2. "+nameclass);
 			}
 		}
+	}
+	
+	public void readLine(String line) {
 		
 		String line3 = line;
 		String line4 = line;
 		String line20 = line;
-		
+	
 		while (line3.contains("{")) {
 			int bigindexx = line3.indexOf('{');
-			
 			bigindexx = bigindexx +1; 
 			countbig = countbig + 1;
+			getname(line);
 			line3 = line3.substring(bigindexx);
 		}
 		
