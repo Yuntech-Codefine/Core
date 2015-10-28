@@ -42,7 +42,7 @@ class HalsteadKeys {
 }
 
 public class Halstead extends Algorithm {
-	
+	ArrayList<Integer> put = new ArrayList<Integer>(); 
 	String nameclass;
 	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫字元
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t",};
@@ -68,58 +68,79 @@ public class Halstead extends Algorithm {
 	public Halstead() {
 		operators = new HashMap<String, Integer>();
 		operands = new HashMap<String, Integer>();
-		
+		System.out.println("'");
 		for(int i = 0; i < keyschar.length; i++)
 			operators.put(keyschar[i], 0);
 	}
 	
-	public void readLine(String line) {
-		
-		if(line.contains("class")) {
+	public void getname(String fline){
+		if(fline.contains("class")) {
 			countclass+=1;
-			String getname = null;
-			String gettest1,gettest2,gettest3;;
-			String gettest4 = "";
-			if((line.contains("<"))||(line.contains(">"))){ //找class name
-				gettest1 = line.substring(line.indexOf("<"),line.indexOf(">")+1); //進來<>裡面
+			String gettest1,gettest2,gettest3;
+			gettest3 = fline.substring(fline.indexOf("class"),fline.indexOf("{"));
+			System.out.println(gettest3);
+			if((fline.contains("<"))||(fline.contains(">"))){ //找class name
+				gettest1 = fline.substring(fline.indexOf("<"),fline.indexOf(">")+1); //進來<>裡面
 				gettest1 = gettest1.replace(" ", ""); //空白全刪
 				gettest1 = gettest1.replace(",", ", ");//逗號後要空白
-				gettest2 = line.substring(line.indexOf("class")+6,line.indexOf("<"));
-				gettest2 = gettest2.replace(" ", "");
-				getname = gettest2 + gettest1;
-				nameclass = getname;
-			} else {
-				
-				gettest3 = line;
-				gettest3 = gettest3.substring(gettest3.indexOf("class"),gettest3.indexOf("{"));
-							
-			    String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
+				gettest3=fline.substring(fline.indexOf("class")+6,fline.indexOf("<"));
+				gettest3=gettest3.replace(" ","");
+				nameclass = gettest3 + gettest1;
+				System.out.println("1. "+nameclass);
+			}else{
+				String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
 			    for(String token:tokens ){
-			    	  gettest4 += token+ " ";
-			    }
-			  
-			    int a1 = gettest4.indexOf(" "); gettest4 = gettest4.substring(a1+1);
-			    int a2 = gettest4.indexOf(" "); gettest4 = gettest4.substring(0,a2);
-			 	getname = gettest4;
-				nameclass = getname;
+			    	  gettest3 += token+ " ";
+			     }
+			    int a1 = gettest3.indexOf(" "); gettest3 = gettest3.substring(a1+1);
+			    int a2 = gettest3.indexOf(" "); gettest3 = gettest3.substring(0,a2);
+			    nameclass = gettest3;
+				System.out.println("2. "+nameclass);
 			}
 		}
-		
+	
+	}
+	public void readLine(String line) {
+		String line2 = line;
 		String line3 = line;
 		String line4 = line;
 		String line20 = line;
+		if (line3.contains("\"")){
+			int xxxx = line3.indexOf("\"");
+			xxxx = xxxx + 1;
+			line3 = line3.substring(xxxx);
+			line2 = line2.substring(0,xxxx);
+			for (int aaaa = 0; aaaa <line3.length(); aaaa++){
+				if ((line3.charAt(aaaa))== '\"'){
+					break;
+				}
+				if (line3.contains("{")){
+					line3 = line3.replace('{',' ');
+				}
+			}
+		}
+		
 		
 		while (line3.contains("{")) {
-			int bigindexx = line3.indexOf('{');
+			int bigindexx = line3.indexOf("{");
+			if (countbig == 0){
+				bigindexx = bigindexx +1; 
+				countbig = countbig + 1;
+				if (countbig == 1){
+				getname(line);
+				}
+			}else{
+				countbig = countbig + 1;
+				bigindexx = bigindexx +1; 
+				
+			}
 			
-			bigindexx = bigindexx +1; 
-			countbig = countbig + 1;
 			line3 = line3.substring(bigindexx);
+			System.out.println();
 		}
 		
 		if (countbig != 0) {
 			int t = 0;
-			ArrayList<Integer> put = new ArrayList<Integer>(); 
 			line = line.toLowerCase(); // 小寫
 			//String[] token = line.split(" "); // 遇空白切割
 			
@@ -137,14 +158,9 @@ public class Halstead extends Algorithm {
 					line = line.replace(line, "");
 				}
 				
-				if((line.contains("<")) && (line.contains(">"))) {  //找出範型區塊的<~> ex.HashMap<String, Integer>
-					int f3, f4;
-					f3 = line.indexOf("<"); //抓出<的位置
-					f4 = line.indexOf(">"); //抓出>的位置
-					line = line.substring(f3,f4+1); //HashMap<String, Integer> 變成 <String, Integer>
-					line = line.replace(("<")," "); //將<變成空白
-					line = line.replace((">")," "); //將>變成空白
-				}
+				
+				
+			
 				//line = line.replace(" ", ""); // 拿掉所有空格
 				
 				int keyIndex = 0;			
@@ -160,17 +176,19 @@ public class Halstead extends Algorithm {
 					h++;
 					leftBound += keyIndex + 1;
 		     	}
-				
-				for (t = put.size() - 1; t >= 0; t = t - 2) {
-					//System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
-					String key = line.substring(put.get(t - 1) + 1, put.get(t));
+				if (t != 0){
 					
-					if(operands.containsKey(key)) {
-						operands.put(key, operands.get(key) + 1);
-					} else {
-						operands.put(key, 1);
+					for (t = put.size() - 1; t >= 0; t = t - 2) {
+						//System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
+						String key = line.substring(put.get(t - 1) + 1, put.get(t));
+						
+						if(operands.containsKey(key)) {
+							operands.put(key, operands.get(key) + 1);
+						} else {
+							operands.put(key, 1);
+						}
+						line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
 					}
-					line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
 				}
 			} //此為line!=null的結尾
 		
@@ -213,7 +231,7 @@ public class Halstead extends Algorithm {
 			}
 			
 			while (line4.contains("}")) {
-				smallindex = line4.indexOf('}');
+				smallindex = line4.indexOf("}");
 				smallindex = smallindex +1; 
 				countbig = countbig - 1;
 				line4 = line4.substring(smallindex);
@@ -244,6 +262,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
+	
 	}
 	
 	public String getValue() {
