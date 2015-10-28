@@ -1,7 +1,6 @@
 package codefine.metric;
 
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -66,7 +65,6 @@ public class Cyclomatic extends Algorithm {
 	String[] keywords = {"if", "for", "while", "case", "default", "continue", "&&", "||", "&", "|" };
 	
 	public Cyclomatic() {
-		value = 1;
 		classList = new ArrayList<ClassModel>();
 	}
 	
@@ -88,10 +86,24 @@ public class Cyclomatic extends Algorithm {
 			}
 			
 			int i;
+			boolean isNotMethod = false;
 			
 			for(i = lastIndex; i < combinedLine.length(); i++) {
 				if(combinedLine.charAt(i) == '{') {
-					brackets++;
+					
+					int lastEnding = combinedLine.substring(0, i).lastIndexOf(';');
+					
+					if(lastEnding < 0) {
+						if(!combinedLine.substring(combinedLine.lastIndexOf('{'), i).contains("="))
+							brackets++;
+						else
+							isNotMethod = true;
+					} else {
+						if(!combinedLine.substring(lastEnding, i).contains("="))
+							brackets++;
+						else
+							isNotMethod = true;
+					}
 					
 					if(brackets == 1) {
 						ClassModel classModel = new ClassModel();
@@ -101,18 +113,18 @@ public class Cyclomatic extends Algorithm {
 						classList.get(classList.size() - 1).addMethod(new MethodModel(searchMethodName(combinedLine, i)));
 					}
 				} else if(combinedLine.charAt(i) == '}') {
-					brackets--;
+					if(!isNotMethod)
+						brackets--;
+					isNotMethod = false;
 				}
 				
-				if(combinedLine.charAt(i) == '"') {
-					isQuotes = !isQuotes;
-				}
+				if(combinedLine.charAt(i) == '"') isQuotes = !isQuotes;
 				
 				if(brackets >= 2) {
 					for(String key : keywords) {
 						i = keyCount(combinedLine, key, i);
 						classList.get(classList.size() - 1).getLast().cc = value;
-						value = 1;
+						value = 1; // cc從1開始加計
 					}
 				}
 			}
@@ -153,7 +165,6 @@ public class Cyclomatic extends Algorithm {
 			int ei = line.substring(ci, index).indexOf("<");
 			int si = line.substring(ci, index).indexOf(">");
 			
-			
 			if(si >= 0) {
 				int tmp = ei - 1;
 				while(line.substring(ci, index).charAt(tmp) == ' ') tmp--;
@@ -178,11 +189,11 @@ public class Cyclomatic extends Algorithm {
 		String paramKeys = "";
 		String result = "";
 		
-		// 處理括號內的部分
+		// 處理()括號內的部分
 		do {
 			countP = 0;
 			i1 = 0; i2 = 0;
-			for(int k = 0; k < param.length(); k++) { // 抓出目前param左邊數來的第一對<>
+			for(int k = 0; k < param.length(); k++) { // 抓出目前 param 左邊數來的第一對<>
 				switch(param.charAt(k)) {
 					case '<':
 						if(countP == 0) {
@@ -210,11 +221,12 @@ public class Cyclomatic extends Algorithm {
 			if(param.substring(i2).contains(",")) { // 後面還有參數
 				paramKeys += param.substring(0, i1).trim() + formatParam(param.substring(i1, i2 + 1)) + ", ";
 				param = param.substring(param.substring(i2).indexOf(",") + i2 + 1);
-			} else { // 找到最後一個參數了
+			} else if (i1 != 0 && i2 >= i1){ // 找到最後一個參數了
 				paramKeys += param.substring(0, i1).trim() + formatParam(param.substring(i1, i2 + 1));
 				param = param.substring(i2 + 1).trim();
 			}
-		} while(param.contains(" "));
+			
+		} while(i1 != 0 && i2 != 0);
 		
 		// 處理括號前面的部分
 		int j = ci - 1;
