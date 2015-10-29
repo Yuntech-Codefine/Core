@@ -27,13 +27,13 @@ public class Test {
 			
 			while ((line = bufferedReader.readLine()) != null)
 			{
-				//cyclomatic.readLine(line);
+				cyclomatic.readLine(line);
 				halstead.readLine(line);
 			}
 			
 			bufferedReader.close();
 			System.out.println(halstead.getValue());
-			System.out.println(cyclomatic.getValue());
+			//System.out.println(cyclomatic.getValue());
 			//Reader reader = new Reader();
 			//reader.read(connection);
 			//System.out.println(reader.getCyclomatic());
