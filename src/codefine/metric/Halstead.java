@@ -122,8 +122,8 @@ public class Halstead extends Algorithm {
 			leftBound += keyIndex + 1;
      	}
 		
+		
 		if (t != 0){
-			
 			for (t = put.size() - 1; t >= 0; t = t - 2) {
 				System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
 				String key = line.substring(put.get(t - 1) + 1, put.get(t));
