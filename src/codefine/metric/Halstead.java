@@ -101,26 +101,59 @@ public class Halstead extends Algorithm {
 	
 	}
 	public void readLine(String line) {
-		String line2 = line;
+		
+		String line15 = line;
 		String line3 = line;
 		String line4 = line;
 		String line20 = line;
-		if (line3.contains("\"")){
-			int xxxx = line3.indexOf("\"");
-			xxxx = xxxx + 1;
-			line3 = line3.substring(xxxx);
-			line2 = line2.substring(0,xxxx);
-			for (int aaaa = 0; aaaa <line3.length(); aaaa++){
-				if ((line3.charAt(aaaa))== '\"'){
-					break;
+		int t = 0;
+		int keyIndex = 0;			
+		int leftBound = -1;
+		int h = 0;
+		
+		while ((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) {
+			if(h > 0) {
+				put.add(keyIndex + put.get(h-1) + 1);
+				//System.out.println(keyIndex + put.get(h-1) + 1);
+			} else {
+				put.add(keyIndex);
+			}
+			h++;
+			leftBound += keyIndex + 1;
+     	}
+		
+		if (t != 0){
+			
+			for (t = put.size() - 1; t >= 0; t = t - 2) {
+				System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
+				String key = line.substring(put.get(t - 1) + 1, put.get(t));
+				
+				if(operands.containsKey(key)) {
+					operands.put(key, operands.get(key) + 1);
+				} else {
+					operands.put(key, 1);
 				}
-				if (line3.contains("{")){
-					line3 = line3.replace('{',' ');
-				}
+				line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
 			}
 		}
-		
-		
+		System.out.println(line);
+		line3 =line;
+		line4 =line;
+		int find2 = line4.indexOf('{');
+		int find =line3.indexOf('{');
+		if (find > 0){
+		find = find -1 ;
+		if (line3.charAt(find) == '\''){
+			find = find +1;
+			line3= line3.replace(line3.charAt(find), ' ');
+		}
+		}
+		if (find2 > 0){
+		if (line4.charAt(find) == '\''){
+			find = find +1;
+			line4= line4.replace(line4.charAt(find), ' ');
+		}
+		}
 		while (line3.contains("{")) {
 			int bigindexx = line3.indexOf("{");
 			if (countbig == 0){
@@ -131,16 +164,14 @@ public class Halstead extends Algorithm {
 				}
 			}else{
 				countbig = countbig + 1;
-				bigindexx = bigindexx +1; 
-				
+				bigindexx = bigindexx +1; 				
 			}
 			
 			line3 = line3.substring(bigindexx);
-			System.out.println();
 		}
 		
 		if (countbig != 0) {
-			int t = 0;
+			
 			line = line.toLowerCase(); // 小寫
 			//String[] token = line.split(" "); // 遇空白切割
 			
@@ -158,38 +189,10 @@ public class Halstead extends Algorithm {
 					line = line.replace(line, "");
 				}
 				
-				
-				
 			
 				//line = line.replace(" ", ""); // 拿掉所有空格
 				
-				int keyIndex = 0;			
-				int leftBound = -1;
-				int h = 0;
-				while ((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) {
-					if(h > 0) {
-						put.add(keyIndex + put.get(h-1) + 1);
-						//System.out.println(keyIndex + put.get(h-1) + 1);
-					} else {
-						put.add(keyIndex);
-					}
-					h++;
-					leftBound += keyIndex + 1;
-		     	}
-				if (t != 0){
-					
-					for (t = put.size() - 1; t >= 0; t = t - 2) {
-						//System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
-						String key = line.substring(put.get(t - 1) + 1, put.get(t));
-						
-						if(operands.containsKey(key)) {
-							operands.put(key, operands.get(key) + 1);
-						} else {
-							operands.put(key, 1);
-						}
-						line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
-					}
-				}
+				
 			} //此為line!=null的結尾
 		
 		
@@ -234,6 +237,7 @@ public class Halstead extends Algorithm {
 				smallindex = line4.indexOf("}");
 				smallindex = smallindex +1; 
 				countbig = countbig - 1;
+				System.out.println("xxxxx");
 				line4 = line4.substring(smallindex);
 			}
 		}
@@ -262,7 +266,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
-	
+		System.out.println(countbig);
 	}
 	
 	public String getValue() {
