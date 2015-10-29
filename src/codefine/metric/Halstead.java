@@ -86,7 +86,7 @@ public class Halstead extends Algorithm {
 				gettest3=fline.substring(fline.indexOf("class")+6,fline.indexOf("<"));
 				gettest3=gettest3.replace(" ","");
 				nameclass = gettest3 + gettest1;
-				//System.out.println("1. "+nameclass);
+				System.out.println("1. "+nameclass);
 			}else{
 				String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
 			    for(String token:tokens ){
@@ -95,7 +95,7 @@ public class Halstead extends Algorithm {
 			    int a1 = gettest3.indexOf(" "); gettest3 = gettest3.substring(a1+1);
 			    int a2 = gettest3.indexOf(" "); gettest3 = gettest3.substring(0,a2);
 			    nameclass = gettest3;
-				//System.out.println("2. "+nameclass);
+				System.out.println("2. "+nameclass);
 			}
 		}
 	
@@ -109,38 +109,88 @@ public class Halstead extends Algorithm {
 		int keyIndex = 0;			
 		int leftBound = -1;
 		int size = 0; // size of "put"
-		if (line.contains("\"")){
+		
+		/*if (line.contains("\"")){
 			int find4 = line.indexOf("\"");
 			line16 = line.substring(find4+1);
 			if (!(line16.contains("\""))){
 				line= line.substring(find4+1);
 			}
-		}
+		}*/
+		
+		line = line.replaceAll("\t", ""); // 將定位點取代掉
+		
 		while ((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) {
 			if(size > 0) {
-				put.add(keyIndex + put.get(put.size() - 1));
+				//System.out.println("##"+line+"@@"+leftBound+"$$"+keyIndex);
+				if(leftBound + keyIndex > 0) {
+					
+					if(line.charAt(leftBound + keyIndex) != '\\') { // 前一個不是\
+						put.add(keyIndex + put.get(put.size() - 1));
+						size++;
+					} else {
+						if(leftBound + keyIndex > 1) {
+							if(line.charAt(leftBound + keyIndex - 1) == '\\') { // 前面是\\
+								put.add(keyIndex + put.get(put.size() - 1));
+								size++;
+							}
+						} else { // line以\"為開頭
+							
+						}
+						keyIndex += 2;
+					}
+				} else {
+					put.add(keyIndex + put.get(put.size() - 1));
+					size++;
+				}
 			} else {
 				put.add(keyIndex);
+				size++;
 			}
-			size++;
 			leftBound += keyIndex + 1;
      	}
 		if(size > 0) { // 有讀到字串
-			for (int t = put.size() - 1; t >= 0; t = t - 2) {
-				String key = line.substring(put.get(t - 1) + size - 1, put.get(t) + size - 1);
-				if(operands.containsKey(key)) {
-					operands.put(key, operands.get(key) + 1);
-				} else {
-					operands.put(key, 1);
+			int rightBound = line.length();
+			boolean inComment = false;
+			while ((keyIndex = line.substring(0, rightBound).lastIndexOf("//")) >= 0) {
+				int tmp = size;
+				for (int t = put.size() - 1; t > 0; t -= 2) {
+					System.out.println(line+"@@"+keyIndex+"!!"+(put.get(t - 1) - tmp)+ "^^"+ (put.get(t) - tmp));
+					if (keyIndex > put.get(t - 1) - tmp && keyIndex < put.get(t) - tmp) {
+						inComment = true;
+					}
+					tmp -= 2;
+					if(tmp < 2) break;
 				}
-			//	System.out.println("\n原始雙引號：" + line);
-				line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
-				//System.out.println("幹掉之後的：" + line);
-				size -= 2;
-				if(size < 2) break;
+				if(!inComment) {
+					line = line.substring(0, keyIndex);
+					
+					inComment = false;
+					rightBound = keyIndex;
+				} else {
+					rightBound -= keyIndex;
+				}
+			}
+			System.out.println(line);
+			if(line.contains("\"")) {
+				for (int t = put.size() - 1; t >= 0; t = t - 2) {
+					//System.out.println("@@"+line + "@@" + put.get(t-1) + "@@"+put.get(t));
+					String key = line.substring(put.get(t - 1) + size - 1, put.get(t) + size - 1);
+					if(operands.containsKey(key)) {
+						operands.put(key, operands.get(key) + 1);
+					} else {
+						operands.put(key, 1);
+					}
+					//System.out.println("\n原始雙引號：" + line);
+					line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
+					//System.out.println("幹掉之後的：" + line);
+					size -= 2;
+					if(size < 2) break;
+				}
 			}
 		}
-		if(line.contains("\\")){  ////找出跳脫字元 然後略過
+		
+		/*if(line.contains("\\")){  ////找出跳脫字元 然後略過
 			int find3 = line.indexOf("\\");
 			find3= find3 + 1;
 			if ((line.charAt(find3) == 'b')||(line.charAt(find3) == 'f')||(line.charAt(find3) == 'n')||(line.charAt(find3) == 'r')||(line.charAt(find3) == 't')){
@@ -148,7 +198,7 @@ public class Halstead extends Algorithm {
 			   }else{
 				   line=line.substring(find3);
 			   }
-		}
+		}*/
 		if (line.contains("\'")){
 			int find4 = line.indexOf("\'");
 			line16 = line.substring(find4+1);
@@ -156,7 +206,6 @@ public class Halstead extends Algorithm {
 				line= line.substring(find4+1);
 			}
 		}
-		System.out.println(line);
 		line3 =line;
 		line4 =line;
 		int find =line3.indexOf('{');
@@ -188,31 +237,6 @@ public class Halstead extends Algorithm {
 		}
 		
 		if (countbig != 0) {
-			
-			line = line.toLowerCase(); // 小寫
-			//String[] token = line.split(" "); // 遇空白切割
-			
-			if(line != null) {
-				if (line.contains("//")) { // 遇到註解
-	                line = line.substring(0, line.indexOf("//"));  // 移除註解後面的東西
-	            }
-			
-				//這裡開始是區塊註解部分
-				if (line.contains("/*")) {   //當遇到/*時 只接刪除整行
-					line = line.substring(line.indexOf("/*"));
-					line = line.replace(line, "");						
-				} else if(line.contains("*/")) { //當程式\碼中有 */也刪除
-					line = line.substring(0,line.indexOf("*/")+2);
-					line = line.replace(line, "");
-				}
-				
-			
-				//line = line.replace(" ", ""); // 拿掉所有空格
-				
-				
-			} //此為line!=null的結尾
-		
-		
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				
 				int here= 0 ;
@@ -287,7 +311,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
-		//System.out.println(countbig);
+		//System.out.println(countbig + "_"+ line);
 	}
 	
 	public String getValue() {
@@ -326,6 +350,10 @@ public class Halstead extends Algorithm {
 	}
 	
 	public static double log2(int n) {
-	    return Math.log(n) / Math.log(2);
+		if(n <= 0) {
+			return 0;
+		} else {
+			return Math.log(n) / Math.log(2);
+		}
 	}
 }
