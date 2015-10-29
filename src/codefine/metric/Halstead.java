@@ -86,7 +86,7 @@ public class Halstead extends Algorithm {
 				gettest3=fline.substring(fline.indexOf("class")+6,fline.indexOf("<"));
 				gettest3=gettest3.replace(" ","");
 				nameclass = gettest3 + gettest1;
-				System.out.println("1. "+nameclass);
+				//System.out.println("1. "+nameclass);
 			}else{
 				String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
 			    for(String token:tokens ){
@@ -95,7 +95,7 @@ public class Halstead extends Algorithm {
 			    int a1 = gettest3.indexOf(" "); gettest3 = gettest3.substring(a1+1);
 			    int a2 = gettest3.indexOf(" "); gettest3 = gettest3.substring(0,a2);
 			    nameclass = gettest3;
-				System.out.println("2. "+nameclass);
+				//System.out.println("2. "+nameclass);
 			}
 		}
 	
@@ -127,9 +127,9 @@ public class Halstead extends Algorithm {
 				} else {
 					operands.put(key, 1);
 				}
-				System.out.println("\n原始雙引號：" + line);
+			//	System.out.println("\n原始雙引號：" + line);
 				line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
-				System.out.println("幹掉之後的：" + line);
+				//System.out.println("幹掉之後的：" + line);
 				size -= 2;
 				if(size < 2) break;
 			}
@@ -137,23 +137,31 @@ public class Halstead extends Algorithm {
 		if(line.contains("\\")){  ////找出跳脫字元 然後略過
 			int find3 = line.indexOf("\\");
 			find3= find3 + 1;
-			if (line.charAt(find3) == 'b'){
-				line = line.substring(0,find3-1)+line.substring(find3+1); 
+			switch(line.charAt(find3)){
+				case 'b':
+					line = line.substring(0,find3-1)+line.substring(find3+1); 
+					break; 
+				case 'f':
+					line = line.substring(0,find3-1)+line.substring(find3+1); 
+					break; 
+				case 'n':
+					line = line.substring(0,find3-1)+line.substring(find3+1); 
+					break; 
+				case 'r':
+					line = line.substring(0,find3-1)+line.substring(find3+1); 
+					break; 
+				case 't':
+					line = line.substring(0,find3-1)+line.substring(find3+1);
+					break; 
+				case '\\':
+					line = line.substring(0,find3-1)+line.substring(find3+1);
+					break; 
+				
+				
 			}
-			if (line.charAt(find3) == 'f'){
-				line = line.substring(0,find3-1)+line.substring(find3+1); 
-			}
-			if (line.charAt(find3) == 'n'){
-				line = line.substring(0,find3-1)+line.substring(find3+1); 
-			}
-			if (line.charAt(find3) == 'r'){
-				line = line.substring(0,find3-1)+line.substring(find3+1); 
-			}
-			if (line.charAt(find3) == 't'){
-				line = line.substring(0,find3-1)+line.substring(find3+1); 
-			}
+			System.out.println(line);
 		}
-		System.out.println(line);
+		
 		line3 =line;
 		line4 =line;
 		int find =line3.indexOf('{');
@@ -284,7 +292,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
-		System.out.println(countbig);
+		//System.out.println(countbig);
 	}
 	
 	public String getValue() {
