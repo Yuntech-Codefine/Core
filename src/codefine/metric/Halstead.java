@@ -111,7 +111,6 @@ public class Halstead extends Algorithm {
 		int size = 0; // size of "put"
 		
 		while ((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) {
-			////找出跳脫字元 然後略過
 			if(size > 0) {
 				put.add(keyIndex + put.get(put.size() - 1));
 			} else {
@@ -135,7 +134,14 @@ public class Halstead extends Algorithm {
 				if(size < 2) break;
 			}
 		}
-		
+		if(line.contains("\\")){  ////找出跳脫字元 然後略過
+			for(int bb = 0; bb<escapedchar.length;bb++){
+				if(line.contains(escapedchar[bb])){
+					line = line.replace(escapedchar[bb], "");
+				}
+			}
+			System.out.println(line);
+		}
 		line3 =line;
 		line4 =line;
 		int find =line3.indexOf('{');
