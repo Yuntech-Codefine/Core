@@ -86,7 +86,7 @@ public class Halstead extends Algorithm {
 				gettest3=fline.substring(fline.indexOf("class")+6,fline.indexOf("<"));
 				gettest3=gettest3.replace(" ","");
 				nameclass = gettest3 + gettest1;
-				//System.out.println("1. "+nameclass);
+				System.out.println("1. "+nameclass);
 			}else{
 				String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
 			    for(String token:tokens ){
@@ -95,7 +95,7 @@ public class Halstead extends Algorithm {
 			    int a1 = gettest3.indexOf(" "); gettest3 = gettest3.substring(a1+1);
 			    int a2 = gettest3.indexOf(" "); gettest3 = gettest3.substring(0,a2);
 			    nameclass = gettest3;
-				//System.out.println("2. "+nameclass);
+				System.out.println("2. "+nameclass);
 			}
 		}
 	
@@ -138,21 +138,18 @@ public class Halstead extends Algorithm {
 		
 		line3 =line;
 		line4 =line;
-		int find2 = line4.indexOf('{');
 		int find =line3.indexOf('{');
-		if (find > 0){
+		if (find >= 1){
 		find = find -1 ;
 		if (line3.charAt(find) == '\''){
+			String line99 = line3.substring(find+3);
 			find = find +1;
-			line3= line3.replace(line3.charAt(find), ' ');
+			line3 = line3.substring(0, find+2);
+			line3= line3.replace(line3.charAt(find), 'x');
+			line3= line3 + line99;
 		}
 		}
-		if (find2 > 0){
-		if (line4.charAt(find) == '\''){
-			find = find +1;
-			line4= line4.replace(line4.charAt(find), ' ');
-		}
-		}
+	
 		while (line3.contains("{")) {
 			int bigindexx = line3.indexOf("{");
 			if (countbig == 0){
@@ -231,13 +228,17 @@ public class Halstead extends Algorithm {
 					operands.put(token[xx], 1);
 				}
 			}
-			
+			if (line4.contains("'}'")){
+				int minus = line4.indexOf('}');
+				line4 = line4.substring(0, minus-2) + line4.substring(minus+2);
+			}
 			while (line4.contains("}")) {
 				smallindex = line4.indexOf("}");
 				smallindex = smallindex +1; 
 				countbig = countbig - 1;
 				//System.out.println("xxxxx");
 				line4 = line4.substring(smallindex);
+			
 			}
 		}
 		
@@ -265,7 +266,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
-		//System.out.println(countbig);
+		System.out.println(countbig);
 	}
 	
 	public String getValue() {
