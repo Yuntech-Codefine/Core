@@ -68,7 +68,7 @@ public class Halstead extends Algorithm {
 	public Halstead() {
 		operators = new HashMap<String, Integer>();
 		operands = new HashMap<String, Integer>();
-		System.out.println("'");
+		//System.out.println("'");
 		for(int i = 0; i < keyschar.length; i++)
 			operators.put(keyschar[i], 0);
 	}
@@ -78,7 +78,7 @@ public class Halstead extends Algorithm {
 			countclass+=1;
 			String gettest1,gettest2,gettest3;
 			gettest3 = fline.substring(fline.indexOf("class"),fline.indexOf("{"));
-			System.out.println(gettest3);
+			//System.out.println(gettest3);
 			if((fline.contains("<"))||(fline.contains(">"))){ //找class name
 				gettest1 = fline.substring(fline.indexOf("<"),fline.indexOf(">")+1); //進來<>裡面
 				gettest1 = gettest1.replace(" ", ""); //空白全刪
@@ -86,7 +86,7 @@ public class Halstead extends Algorithm {
 				gettest3=fline.substring(fline.indexOf("class")+6,fline.indexOf("<"));
 				gettest3=gettest3.replace(" ","");
 				nameclass = gettest3 + gettest1;
-				System.out.println("1. "+nameclass);
+				//System.out.println("1. "+nameclass);
 			}else{
 				String[] tokens= gettest3.split("\\s+"); //許多空白分割成一個~
 			    for(String token:tokens ){
@@ -95,7 +95,7 @@ public class Halstead extends Algorithm {
 			    int a1 = gettest3.indexOf(" "); gettest3 = gettest3.substring(a1+1);
 			    int a2 = gettest3.indexOf(" "); gettest3 = gettest3.substring(0,a2);
 			    nameclass = gettest3;
-				System.out.println("2. "+nameclass);
+				//System.out.println("2. "+nameclass);
 			}
 		}
 	
@@ -106,37 +106,36 @@ public class Halstead extends Algorithm {
 		String line3 = line;
 		String line4 = line;
 		String line20 = line;
-		int t = 0;
 		int keyIndex = 0;			
 		int leftBound = -1;
-		int h = 0;
+		int size = 0; // size of "put"
 		
 		while ((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) {
-			if(h > 0) {
-				put.add(keyIndex + put.get(h-1) + 1);
-				//System.out.println(keyIndex + put.get(h-1) + 1);
+			////找出跳脫字元 然後略過
+			if(size > 0) {
+				put.add(keyIndex + put.get(put.size() - 1));
 			} else {
 				put.add(keyIndex);
 			}
-			h++;
+			size++;
 			leftBound += keyIndex + 1;
      	}
-		
-		
-		if (t != 0){
-			for (t = put.size() - 1; t >= 0; t = t - 2) {
-				System.out.println(line.substring(put.get(t - 1) + 1, put.get(t)));
-				String key = line.substring(put.get(t - 1) + 1, put.get(t));
-				
+		if(size > 0) { // 有讀到字串
+			for (int t = put.size() - 1; t >= 0; t = t - 2) {
+				String key = line.substring(put.get(t - 1) + size - 1, put.get(t) + size - 1);
 				if(operands.containsKey(key)) {
 					operands.put(key, operands.get(key) + 1);
 				} else {
 					operands.put(key, 1);
 				}
-				line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
+				System.out.println("\n原始雙引號：" + line);
+				line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
+				System.out.println("幹掉之後的：" + line);
+				size -= 2;
+				if(size < 2) break;
 			}
 		}
-		System.out.println(line);
+		
 		line3 =line;
 		line4 =line;
 		int find2 = line4.indexOf('{');
@@ -237,7 +236,7 @@ public class Halstead extends Algorithm {
 				smallindex = line4.indexOf("}");
 				smallindex = smallindex +1; 
 				countbig = countbig - 1;
-				System.out.println("xxxxx");
+				//System.out.println("xxxxx");
 				line4 = line4.substring(smallindex);
 			}
 		}
@@ -266,7 +265,7 @@ public class Halstead extends Algorithm {
 			Results.add(halsteadKeys);
 	        operands.clear();
 		}
-		System.out.println(countbig);
+		//System.out.println(countbig);
 	}
 	
 	public String getValue() {
