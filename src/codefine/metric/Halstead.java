@@ -101,7 +101,7 @@ public class Halstead extends Algorithm {
 	
 	}
 	public void readLine(String line) {
-		
+		String line16 = line;
 		String line15 = line;
 		String line3 = line;
 		String line4 = line;
@@ -109,7 +109,13 @@ public class Halstead extends Algorithm {
 		int keyIndex = 0;			
 		int leftBound = -1;
 		int size = 0; // size of "put"
-		
+		if (line.contains("\"")){
+			int find4 = line.indexOf("\"");
+			line16 = line.substring(find4+1);
+			if (!(line16.contains("\""))){
+				line= line.substring(find4+1);
+			}
+		}
 		while ((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) {
 			if(size > 0) {
 				put.add(keyIndex + put.get(put.size() - 1));
@@ -137,31 +143,20 @@ public class Halstead extends Algorithm {
 		if(line.contains("\\")){  ////找出跳脫字元 然後略過
 			int find3 = line.indexOf("\\");
 			find3= find3 + 1;
-			switch(line.charAt(find3)){
-				case 'b':
-					line = line.substring(0,find3-1)+line.substring(find3+1); 
-					break; 
-				case 'f':
-					line = line.substring(0,find3-1)+line.substring(find3+1); 
-					break; 
-				case 'n':
-					line = line.substring(0,find3-1)+line.substring(find3+1); 
-					break; 
-				case 'r':
-					line = line.substring(0,find3-1)+line.substring(find3+1); 
-					break; 
-				case 't':
-					line = line.substring(0,find3-1)+line.substring(find3+1);
-					break; 
-				case '\\':
-					line = line.substring(0,find3-1)+line.substring(find3+1);
-					break; 
-				
-				
-			}
-			System.out.println(line);
+			if ((line.charAt(find3) == 'b')||(line.charAt(find3) == 'f')||(line.charAt(find3) == 'n')||(line.charAt(find3) == 'r')||(line.charAt(find3) == 't')){
+			    line = line.substring(0,find3-1)+line.substring(find3+1); 
+			   }else{
+				   line=line.substring(find3);
+			   }
 		}
-		
+		if (line.contains("\'")){
+			int find4 = line.indexOf("\'");
+			line16 = line.substring(find4+1);
+			if (!(line16.contains("\'"))){
+				line= line.substring(find4+1);
+			}
+		}
+		System.out.println(line);
 		line3 =line;
 		line4 =line;
 		int find =line3.indexOf('{');
