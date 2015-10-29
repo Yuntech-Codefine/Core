@@ -27,7 +27,7 @@ public class Test {
 			
 			while ((line = bufferedReader.readLine()) != null)
 			{
-				cyclomatic.readLine(line);
+				//cyclomatic.readLine(line);
 				halstead.readLine(line);
 			}
 			
