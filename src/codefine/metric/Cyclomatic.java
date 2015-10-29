@@ -58,7 +58,7 @@ public class Cyclomatic extends Algorithm {
 		"~", "<<", ">>", ">>>", // 位元運算子
 		"<", ">", "<=", ">=", "==", "!=", "instanceof", // 關係運算子
 	};
-	String[] keywords = {"if", "for", "while", "case", "default", "continue", "&&", "||", "&", "|" };
+	String[] keywords = {"if", "for", "while", "case", "default", "continue", "&&", "||", "&", "|"};
 	
 	public Cyclomatic() {
 		classList = new ArrayList<ClassModel>();

@@ -44,7 +44,7 @@ class HalsteadKeys {
 public class Halstead extends Algorithm {
 	ArrayList<Integer> put = new ArrayList<Integer>(); 
 	String nameclass;
-	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  //跳脫字元
+	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  // 跳脫字元
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t"};
     String keyschar[] = {"case","int", "abstract", "continue", "for", "new", "switch", "assert", "default",
     	"goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break",
@@ -53,8 +53,8 @@ public class Halstead extends Algorithm {
     	"strictfp", "volatile", "const", "float", "native", "super", "while", "String", "echo", "++",
     	"*", "+", "-", "<<", "<", "==", "&", "^", "|", "&&","||", "?:", ">=", "+=", "-=", "*=", "/=", ":",
     	"%=", "&=","^=", "|=", "<<=", ">>=", ">>>=", "--", "!=","=", "*", "/", "%", "!", "==",
-		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>",";" ,"(",")", "[",  "]", "{","}"}; //保留字、運算子
-    String[] SP = {",", ".", ";", "@","\\", "/*", "*/", "\""};  //特殊符號;
+		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>",";" ,"(",")", "[",  "]", "{","}"}; // 保留字、運算子
+    String[] SP = {",", ".", ";", "@","\\", "/*", "*/", "\""};  // 特殊符號
     String[] Num = {"0","1","2","3","4","5","6","7","8","9"};
     
     int countclass = 0;
@@ -103,18 +103,12 @@ public class Halstead extends Algorithm {
 	}
 	
 	public void readLine(String line) {
-		String line16 = line;
-		String line3 = line;
-		String line4 = line;
-		String line20 = line;
-		
 		int keyIndex = 0;			
 		int leftBound = -1;
 		int size = 0; // size of "put"
 		
 		line = line.replaceAll("\t", ""); // 將定位點取代掉
-		
-		while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) {
+		while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) { // 避免跳脫符號的"
 			if(size > 0) {
 				if(leftBound + keyIndex > 0) {
 					if(line.charAt(leftBound + keyIndex) != '\\') { // 前一個不是\
@@ -140,7 +134,7 @@ public class Halstead extends Algorithm {
 			leftBound += keyIndex + 1;
      	}
 		
-		if(size > 0) { // 有讀到字串
+		if(size > 0) { // 有讀到""
 			int rightBound = line.length();
 			boolean inComment = false;
 			while((keyIndex = line.substring(0, rightBound).lastIndexOf("//")) >= 0) {
@@ -161,23 +155,26 @@ public class Halstead extends Algorithm {
 				}
 			}
 			
-			if(line.contains("\"")) {
-				for(int t = put.size() - 1; t >= 0; t = t - 2) {
-					if(size < 2) break;
-					String key = line.substring(put.get(t - 1) + size - 1, put.get(t) + size - 1);
-					
-					if(operands.containsKey(key)) {
-						operands.put(key, operands.get(key) + 1);
-					} else {
-						operands.put(key, 1);
-					}
-					//System.out.println("\n原始雙引號：" + line);
-					line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
-					//System.out.println("幹掉之後的：" + line);
-					size -= 2;
+			for(int t = put.size() - 1; t >= 0; t = t - 2) {
+				if(size < 2) break;
+				String key = line.substring(put.get(t - 1) + size - 1, put.get(t) + size - 1);
+				
+				if(operands.containsKey(key)) {
+					operands.put(key, operands.get(key) + 1);
+				} else {
+					operands.put(key, 1);
 				}
+				//System.out.println("\n原始雙引號：" + line);
+				line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
+				//System.out.println("幹掉之後的：" + line);
+				size -= 2;
 			}
+		} else {
+			if(line.contains("//"))
+				line = line.substring(0, line.indexOf("//"));
 		}
+		
+		String line16 = line;
 		
 		if(line.contains("\'")) {
 			int find4 = line.indexOf("\'");
@@ -187,8 +184,8 @@ public class Halstead extends Algorithm {
 			}
 		}
 		
-		line3 = line;
-		line4 = line;
+		String line3 = line;
+		String line4 = line;
 		int find = line3.indexOf('{');
 		
 		if(find >= 1) {
@@ -215,6 +212,8 @@ public class Halstead extends Algorithm {
 			
 			line3 = line3.substring(bigindexx);
 		}
+		
+		String line20 = line;
 		
 		if(countbig != 0) {
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
