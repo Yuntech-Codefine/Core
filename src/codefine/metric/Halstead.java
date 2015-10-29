@@ -135,13 +135,25 @@ public class Halstead extends Algorithm {
 			}
 		}
 		if(line.contains("\\")){  ////找出跳脫字元 然後略過
-			for(int bb = 0; bb<escapedchar.length;bb++){
-				if(line.contains(escapedchar[bb])){
-					line = line.replace(escapedchar[bb], "");
-				}
+			int find3 = line.indexOf("\\");
+			find3= find3 + 1;
+			if (line.charAt(find3) == 'b'){
+				line = line.substring(0,find3-1)+line.substring(find3+1); 
 			}
-			System.out.println(line);
+			if (line.charAt(find3) == 'f'){
+				line = line.substring(0,find3-1)+line.substring(find3+1); 
+			}
+			if (line.charAt(find3) == 'n'){
+				line = line.substring(0,find3-1)+line.substring(find3+1); 
+			}
+			if (line.charAt(find3) == 'r'){
+				line = line.substring(0,find3-1)+line.substring(find3+1); 
+			}
+			if (line.charAt(find3) == 't'){
+				line = line.substring(0,find3-1)+line.substring(find3+1); 
+			}
 		}
+		System.out.println(line);
 		line3 =line;
 		line4 =line;
 		int find =line3.indexOf('{');
