@@ -136,6 +136,9 @@ public class Halstead extends Algorithm {
 				line = line.substring(0, put.get(t - 1)) + line.substring(put.get(t));
 			}
 		}
+		System.out.println(line);
+		line3 =line;
+		line4 =line;
 		int find2 = line4.indexOf('{');
 		int find =line3.indexOf('{');
 		if (find > 0){
