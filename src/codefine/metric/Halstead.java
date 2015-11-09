@@ -276,7 +276,8 @@ public class Halstead extends Algorithm {
 			}
 			
 			if(line4.contains("'}'")) {
-				int minus = line4.indexOf('}');
+				System.out.println("幹你娘:+"+line4);
+				int minus = line4.indexOf("'}'"); 
 				line4 = line4.substring(0, minus-2) + line4.substring(minus+2);
 			}
 			while(line4.contains("}")) {
