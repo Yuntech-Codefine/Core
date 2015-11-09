@@ -105,32 +105,56 @@ public class Halstead extends Algorithm {
 	public void readLine(String line) {
 		int keyIndex = 0;			
 		int leftBound = -1;
-		int size = 0; // size of "put"
+		int size = 0; // size of put
 		
 		line = line.replaceAll("\t", ""); // 將定位點取代掉
 		while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) { // 避免跳脫符號的"
+			
+			// 避免只出現一個"
+			//////////////////////
+			
 			if(size > 0) {
-				if(leftBound + keyIndex > 0) {
-					if(line.charAt(leftBound + keyIndex) != '\\') { // 前一個不是\
-						put.add(keyIndex + put.get(put.size() - 1));
-						size++;
+				if(leftBound + keyIndex > 0) { // ?????
+					if(line.charAt(leftBound + keyIndex) != '\\') { // 前一個不是\ (正常字串)
+						System.out.println("幹你娘1:"+ put.get(put.size() - 1));
+						if(line.substring(put.get(put.size() - 1), leftBound + keyIndex).contains("//")) { //	避免第一對前面有註解符號 (代表是都是註解)
+							System.out.println("==幹==33");
+							break;
+						} else {
+							put.add(keyIndex + put.get(put.size() - 1));
+							size++;
+						}
+
 					} else {
 						if(leftBound + keyIndex > 1) {
-							if(line.charAt(leftBound + keyIndex - 1) == '\\') { // 前面是\\
-								put.add(keyIndex + put.get(put.size() - 1));
-								size++;
+							if(line.charAt(leftBound + keyIndex - 1) == '\\') { // 前面是兩個\\
+								System.out.println(line + "幹你娘2:"+ (leftBound + keyIndex));
+								if(line.substring(put.get(put.size() - 1), leftBound + keyIndex).contains("//")) { //	避免第一對前面有註解符號 (代表是都是註解)
+									System.out.println("==幹==");
+									break;
+								} else {
+									put.add(keyIndex + put.get(put.size() - 1));
+									size++;
+								}
 							}
 						}
-						keyIndex += 2;
+						//keyIndex += 2; // 跳過兩個字元\\、\"、\t等
+						//↑好像不用這行(?)
 					}
-				} else {
+				} else { // ??不知道啥時會進來 
+					System.out.println("注意注意!!!"+keyIndex);
 					put.add(keyIndex + put.get(put.size() - 1));
 					size++;
 				}
 			} else {
-				put.add(keyIndex);
-				size++;
+				if(line.substring(0, keyIndex).contains("//")) { //	避免第一對前面有註解符號 (代表是都是註解)
+					break;
+				} else {
+					put.add(keyIndex);
+					size++;
+				}
 			}
+			
 			leftBound += keyIndex + 1;
      	}
 		
@@ -164,9 +188,9 @@ public class Halstead extends Algorithm {
 				} else {
 					operands.put(key, 1);
 				}
-				//System.out.println("\n原始雙引號：" + line);
+				System.out.println("\n原始雙引號：" + line);
 				line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
-				//System.out.println("幹掉之後的：" + line);
+				System.out.println("幹掉之後的：" + line);
 				size -= 2;
 			}
 		} else {
@@ -224,6 +248,7 @@ public class Halstead extends Algorithm {
 					here = here + 1;
 					line20 = line20.substring(here);
 				}
+				line20 = line;
 			}
 			
 			for(int replacekey = 0 ; replacekey < keyschar.length; replacekey++)
@@ -265,7 +290,11 @@ public class Halstead extends Algorithm {
 		if((countbig == 0) && (operands.size() != 0)) {
 			int n1 = 0, N1 = 0;
 			int n2 = 0, N2 = 0;
-			
+			System.out.println("class name: "+ nameclass);
+			System.out.println(operators.keySet());
+			System.out.println(operators.values());
+			System.out.println(operands.keySet());
+			System.out.println(operands.values());
 			for(int a = 0; a < keyschar.length; a++) {
 				if ((operators.get(keyschar[a])) > 0) {
 					n2 = n2 + 1;
