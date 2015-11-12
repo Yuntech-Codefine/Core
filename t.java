@@ -8,6 +8,7 @@ class HalsteadKeys {
 	private String className;
 	private HashMap<String, Integer> operators, operands;
 	private int N1, N2, n1, n2;
+	int while3;
 	
 	public HalsteadKeys(String cn, HashMap<String, Integer> operators, HashMap<String, Integer> operands, int N1, int N2, int n1, int n2) {
 		className = cn;

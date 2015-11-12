@@ -46,11 +46,11 @@ public class Halstead extends Algorithm {
 	String nameclass;
 	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  // 跳脫字元
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t"};
-    String keyschar[] = {"case","int", "abstract", "continue", "for", "new", "switch", "assert", "default",
-    	"goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break",
-    	"double","interface", "implements", "protected", "throw", "byte", "else", "import", "public", "throws",
-    	"try", "char", "final", "inrerface", "static", "void", "class", "finally", "long",
-    	"strictfp", "volatile", "const", "float", "native", "super", "while", "String", "echo", "++",
+    String keyschar[] = { "interface ", "throws ", "public ", "protected ", "abstract ",
+    	"static ", "void ", "class ", "strictfp ", "volatile ", "synchronized ", "private ", "native ",
+    	"case","int", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "boolean",
+    	"do", "if",  "this", "break","double", "implements","throw", "byte", "else", "import ", "try", "char",
+    	"final ","finally", "long", "const", "float",  "super", "while", "String", "++",
     	"*", "+", "-", "<<", "<", "==", "&", "^", "|", "&&","||", "?:", ">=", "+=", "-=", "*=", "/=", ":",
     	"%=", "&=","^=", "|=", "<<=", ">>=", ">>>=", "--", "!=","=", "*", "/", "%", "!", "==",
 		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>",";" ,"(",")", "[",  "]", "{","}"}; // 保留字、運算子
@@ -86,7 +86,7 @@ public class Halstead extends Algorithm {
 				gettest3 = fline.substring(fline.indexOf("class") + 6, fline.indexOf("<"));
 				gettest3 = gettest3.replace(" ", "");
 				nameclass = gettest3 + gettest1;
-				System.out.println("1. " + nameclass);
+				//System.out.println("1. " + nameclass);
 			} else {
 				String[] tokens = gettest3.split("\\s+"); // 許多空白分割成一個~
 				for(String token : tokens)
@@ -97,7 +97,7 @@ public class Halstead extends Algorithm {
 				int a2 = gettest3.indexOf(" ");
 				gettest3 = gettest3.substring(0, a2);
 				nameclass = gettest3;
-				System.out.println("2. " + nameclass);
+				//System.out.println("2. " + nameclass);
 			}
 		}
 	}
@@ -109,16 +109,10 @@ public class Halstead extends Algorithm {
 		
 		line = line.replaceAll("\t", ""); // 將定位點取代掉
 		while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) { // 避免跳脫符號的"
-			
-			// 避免只出現一個"
-			//////////////////////
-			
 			if(size > 0) {
 				if(leftBound + keyIndex > 0) { // ?????
 					if(line.charAt(leftBound + keyIndex) != '\\') { // 前一個不是\ (正常字串)
-						System.out.println("幹你娘1:"+ put.get(put.size() - 1));
 						if(line.substring(put.get(put.size() - 1), leftBound + keyIndex).contains("//")) { //	避免第一對前面有註解符號 (代表是都是註解)
-							System.out.println("==幹==33");
 							break;
 						} else {
 							put.add(keyIndex + put.get(put.size() - 1));
@@ -128,9 +122,7 @@ public class Halstead extends Algorithm {
 					} else {
 						if(leftBound + keyIndex > 1) {
 							if(line.charAt(leftBound + keyIndex - 1) == '\\') { // 前面是兩個\\
-								System.out.println(line + "幹你娘2:"+ (leftBound + keyIndex));
 								if(line.substring(put.get(put.size() - 1), leftBound + keyIndex).contains("//")) { //	避免第一對前面有註解符號 (代表是都是註解)
-									System.out.println("==幹==");
 									break;
 								} else {
 									put.add(keyIndex + put.get(put.size() - 1));
@@ -142,7 +134,7 @@ public class Halstead extends Algorithm {
 						//↑好像不用這行(?)
 					}
 				} else { // ??不知道啥時會進來 
-					System.out.println("注意注意!!!"+keyIndex);
+					//System.out.println("注意注意!!!"+keyIndex);
 					put.add(keyIndex + put.get(put.size() - 1));
 					size++;
 				}
@@ -188,9 +180,9 @@ public class Halstead extends Algorithm {
 				} else {
 					operands.put(key, 1);
 				}
-				System.out.println("\n原始雙引號：" + line);
+			//	System.out.println("\n原始雙引號：" + line);
 				line = line.substring(0, put.get(t - 1) + size - 1) + line.substring(put.get(t) + size - 1);
-				System.out.println("幹掉之後的：" + line);
+			//	System.out.println("幹掉之後的：" + line);
 				size -= 2;
 			}
 		} else {
@@ -238,17 +230,24 @@ public class Halstead extends Algorithm {
 		}
 		
 		String line20 = line;
-		
 		if(countbig != 0) {
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				int here = 0;
-				while(line20.contains(keyschar[i])) {
-					operators.put(keyschar[i], operators.get(keyschar[i]) + 1);
-					here = line20.indexOf(keyschar[i]);
-					here = here + 1;
-					line20 = line20.substring(here);
-				}
+				 //String t1 = keyschar[i].substring(keyschar[i].length()-1); //抓字串最後一字 , 好比class ,最後一個是空白
+				 
+					 while(line20.contains(keyschar[i])) {
+						 
+							operators.put(keyschar[i], operators.get(keyschar[i]) + 1);
+							here = line20.indexOf(keyschar[i]);
+							here = here + 1;
+							line20 = line20.substring(here);
+							//t1 = "";
+						
+					 
+					
+					 }
 				line20 = line;
+				
 			}
 			
 			for(int replacekey = 0 ; replacekey < keyschar.length; replacekey++)
@@ -276,7 +275,6 @@ public class Halstead extends Algorithm {
 			}
 			
 			if(line4.contains("'}'")) {
-				System.out.println("幹你娘:+"+line4);
 				int minus = line4.indexOf("'}'"); 
 				line4 = line4.substring(0, minus-2) + line4.substring(minus+2);
 			}
@@ -291,7 +289,7 @@ public class Halstead extends Algorithm {
 		if((countbig == 0) && (operands.size() != 0)) {
 			int n1 = 0, N1 = 0;
 			int n2 = 0, N2 = 0;
-			System.out.println("class name: "+ nameclass);
+			System.out.println("\nclass name: "+ nameclass);
 			System.out.println(operators.keySet());
 			System.out.println(operators.values());
 			System.out.println(operands.keySet());
