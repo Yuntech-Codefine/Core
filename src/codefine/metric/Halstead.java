@@ -1,4 +1,4 @@
-package codefine.metric; //call call
+package codefine.metric;
 
 import java.util.*;
 import org.json.JSONArray;
@@ -54,6 +54,9 @@ public class Halstead extends Algorithm {
     	"*", "+", "-", "<<", "<", "==", "&", "^", "|", "&&","||", "?:", ">=", "+=", "-=", "*=", "/=", ":",
     	"%=", "&=","^=", "|=", "<<=", ">>=", ">>>=", "--", "!=","=", "*", "/", "%", "!", "==",
 		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>",";" ,"(",")", "[",  "]", "{","}"}; // 保留字、運算子
+    String needadd[] = {"case","int", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "boolean",
+        	"do", "if",  "this", "break","double", "implements","throw", "byte", "else", "import ", "try", "char",
+        	"final ","finally", "long", "const", "float",  "super", "while", "String"};
     String[] SP = {",", ".", ";", "@","\\", "/*", "*/", "\""};  // 特殊符號
     String[] Num = {"0","1","2","3","4","5","6","7","8","9"};
     
@@ -106,7 +109,7 @@ public class Halstead extends Algorithm {
 		int keyIndex = 0;			
 		int leftBound = -1;
 		int size = 0; // size of put
-		
+		String line21 = line;
 		line = line.replaceAll("\t", ""); // 將定位點取代掉
 		while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) { // 避免跳脫符號的"
 			if(size > 0) {
@@ -228,9 +231,32 @@ public class Halstead extends Algorithm {
 			
 			line3 = line3.substring(bigindexx);
 		}
-		
 		String line20 = line;
-		if(countbig != 0) {
+		
+		if(countbig != 0) {                    //假設我們要找case123
+			for (int h = 0; h < needadd.length; h++){   
+				while(line21.contains(needadd[h])){    //case123
+					int aaa = 0;
+					aaa = needadd[h].length();   //case的長度
+					int left =0,right = 0;     
+					left = line21.indexOf(needadd[h]);   //獲得case第一個字C的位置
+					right = left +aaa-1;  //case之後1的位置
+					System.out.println(right);
+					System.out.println(left);
+					System.out.println(line);
+					//for (int aa=0; aa<9; aa++){
+					if (line21.charAt(right).equals(a)){        //是否等於0-9
+						System.out.println("FFFFFFFFFFFFFFFF");
+					}else{
+					
+						System.out.println("FxXXXXXXXXXXXXFFFFFF");
+					
+					line21 = line21.substring(0,left) ;
+					}
+				}
+			}
+			//}	
+			
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				int here = 0;
 				 //String t1 = keyschar[i].substring(keyschar[i].length()-1); //抓字串最後一字 , 好比class ,最後一個是空白
