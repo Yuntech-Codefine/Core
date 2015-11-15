@@ -245,16 +245,19 @@ public class Halstead extends Algorithm {
 					System.out.println(line21+"刪除後"); //印出修改後的句子,ex.String className;
 					b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
 					String bb =String.valueOf(b);        //轉char成String
-					bbb = Integer.valueOf(b);            //String 轉成int
+					bbb = Integer.valueOf(b);  //String 轉成int
+					bbb = bbb -48 ;
 						if (b !=' '){  					 //如果算出來的b值不是空白的話
 							System.out.println("x|" +b);
 							for (int aa=0; aa<10; aa++){
 								if (bbb == aa){        //是否等於0-9
 									System.out.println("FFFFFFFFFFFFFFFF");
-									operators.put(needadd[h], operators.get(needadd[h]) + 1);
-									int here = line21.indexOf(needadd[h]);
-									here = here + 1;
-									line21 = line21.substring(here);
+									if(operands.containsKey(needadd[h])) {
+										operands.put(needadd[h], operands.get(needadd[h]) + 1);
+									} else {
+										operands.put(needadd[h], 1);
+									}
+									System.out.println(needadd[h]);
 								}else{
 									System.out.println("FxXXXXXXXXXXXXFFFFFF");
 									operators.put(needadd[h], operators.get(needadd[h]) + 1);
