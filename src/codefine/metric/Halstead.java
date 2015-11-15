@@ -272,7 +272,7 @@ public class Halstead extends Algorithm {
 							} else {
 								operators.put(needadd[h], 1);
 							}
-							
+							line21= line21.replace(needadd[h], " ");
 							
 							
 							/*int here = line21.indexOf(needadd[h]);
