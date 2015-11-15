@@ -250,8 +250,9 @@ public class Halstead extends Algorithm {
 						if (b !=' '){  					 //如果算出來的b值不是空白的話
 							System.out.println("x|" +b);
 							for (int aa=0; aa<10; aa++){
-								if (bbb == aa){        //是否等於0-9
+								if (bbb == aa ){        //是否等於0-9
 									System.out.println("FFFFFFFFFFFFFFFF");
+									needadd[h]= needadd[h]+bb;
 									if(operands.containsKey(needadd[h])) {
 										operands.put(needadd[h], operands.get(needadd[h]) + 1);
 									} else {
@@ -260,20 +261,24 @@ public class Halstead extends Algorithm {
 									System.out.println(needadd[h]);
 								}else{
 									System.out.println("FxXXXXXXXXXXXXFFFFFF");
-									operators.put(needadd[h], operators.get(needadd[h]) + 1);
-									int here = line21.indexOf(needadd[h]);
-									here = here + 1;
-									line21 = line21.substring(here);
+									//aaaaaaaaaaaaaaa-zzzzzzzzzzzzzz;
 								}
 							}
 						}
 						else{//如果算出來的b值是空白的話
 							System.out.println("aaaaaaaa");
-							operators.put(needadd[h],operators.get(needadd[h]) + 1);
-							int here = line21.indexOf(needadd[h]);
+							if(operators.containsKey(needadd[h])) {
+								operators.put(needadd[h], operators.get(needadd[h]) + 1);
+							} else {
+								operators.put(needadd[h], 1);
+							}
+							
+							
+							
+							/*int here = line21.indexOf(needadd[h]);
 							here = here + 1;
 							line21 = line21.substring(here);
-							System.out.println(line21+"更改後");
+							System.out.println(line21+"更改後");*/
 						}
 					}
 				}	
