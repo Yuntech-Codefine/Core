@@ -46,16 +46,13 @@ public class Halstead extends Algorithm {
 	String nameclass;
 	String escapedchar[] = {"\\","\'","\"","\b","\f","\n","\r","\t"};  // 跳脫字元
 	String keys[] = {"%b","%h","%s","%c","%d","%o","x","e","f","g","a","t"};
-    String keyschar[] = { "interface ", "throws ", "public ", "protected ", "abstract ",
+    String keyschar[] = { "interface ", "throws ", "public ", "protected ", "abstract ", "import ",
     	"static ", "void ", "class ", "strictfp ", "volatile ", "synchronized ", "private ", "native ",
-    	"case","int", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "boolean",
-    	"do", "if",  "this", "break","double", "implements","throw", "byte", "else", "import ", "try", "char",
-    	"final ","finally", "long", "const", "float",  "super", "while", "String", "++",
-    	"*", "+", "-", "<<", "<", "==", "&", "^", "|", "&&","||", "?:", ">=", "+=", "-=", "*=", "/=", ":",
+    	"++","*", "+", "-", "<<", "<", "==", "&", "^", "|", "&&","||", "?:", ">=", "+=", "-=", "*=", "/=", ":",
     	"%=", "&=","^=", "|=", "<<=", ">>=", ">>>=", "--", "!=","=", "*", "/", "%", "!", "==",
 		"!=", ">", ">=", "<", "<=", "=,", "~", ">>", ">>>",";" ,"(",")", "[",  "]", "{","}"}; // 保留字、運算子
     String needadd[] = {"case","int", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "boolean",
-        	"do", "if",  "this", "break","double", "implements","throw", "byte", "else", "import ", "try", "char",
+        	"do", "if",  "this", "break","double", "implements","throw", "byte", "else", "try", "char",
         	"final ","finally", "long", "const", "float",  "super", "while", "String"};
     String[] SP = {",", ".", ";", "@","\\", "/*", "*/", "\""};  // 特殊符號
     String[] Num = {"0","1","2","3","4","5","6","7","8","9"};
@@ -236,6 +233,7 @@ public class Halstead extends Algorithm {
 		
 		if(countbig != 0) {                    //假設我們要找string123
 			for (int h = 0; h < needadd.length; h++){   
+				back1:
 				while(line21.contains(needadd[h])){    //string123
 					int aaa,left,right,bbb ;char b;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
@@ -246,33 +244,62 @@ public class Halstead extends Algorithm {
 					b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
 					String bb =String.valueOf(b);        //轉char成String
 					bbb = Integer.valueOf(b);  //String 轉成int
-					bbb = bbb -48 ;
 						if (b !=' '){  					 //如果算出來的b值不是空白的話
-							System.out.println("x|" +b);
-							for (int aa=0; aa<10; aa++){
-								if (bbb == aa ){        //是否等於0-9
-									System.out.println("FFFFFFFFFFFFFFFF");
-									needadd[h]= needadd[h]+bb;
-									if(operands.containsKey(needadd[h])) {
-										operands.put(needadd[h], operands.get(needadd[h]) + 1);
-									} else {
-										operands.put(needadd[h], 1);
-									}
-									System.out.println(needadd[h]);
-								}else{
-									System.out.println("FxXXXXXXXXXXXXFFFFFF");
-									//aaaaaaaaaaaaaaa-zzzzzzzzzzzzzz;
-								}
-							}
-						}
-						else{//如果算出來的b值是空白的話
+							//System.out.println("x|" +b);
+							for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
+								for(int at=97; at<123; at++){
+									for(int At=65; At<91; At++){
+										System.out.println(bbb);
+										if (bbb == aa ){        //是否等於0-9
+											System.out.println("FFFFFFFFFFFFFFFF");
+											needadd[h]= needadd[h]+bb;
+											if(operands.containsKey(needadd[h])) {
+												operands.put(needadd[h], operands.get(needadd[h]) + 1);
+											} else {
+												operands.put(needadd[h], 1);
+											}
+											line21= line21.replace(needadd[h], "");
+										}
+									//=======================================================	
+										if (bbb == at ){        //是否等於a-z
+											System.out.println("a");
+											needadd[h]= needadd[h]+bb;
+											if(operands.containsKey(needadd[h])) {
+												operands.put(needadd[h], operands.get(needadd[h]) + 1);
+											} else {
+												operands.put(needadd[h], 1);
+											}
+											line21= line21.replace(needadd[h], "");
+											//break back1;
+											//System.out.println(needadd[h]);
+										}
+								   //=======================================================	
+										if (bbb == At ){        //是否等於A-Z
+											System.out.println("A");
+											needadd[h]= needadd[h]+bb;
+											if(operands.containsKey(needadd[h])) {
+												operands.put(needadd[h], operands.get(needadd[h]) + 1);
+											} else {
+												operands.put(needadd[h], 1);
+											}
+											line21= line21.replace(needadd[h], "");
+											//break back1;
+											//System.out.println(needadd[h]);
+										} else{
+											break back1; //回到236去
+										}
+										
+									}//A~Z的最後
+								} //a~z的最後	
+							}//0~9的最後
+						}else{//如果算出來的b值是空白的話
 							System.out.println("aaaaaaaa");
 							if(operators.containsKey(needadd[h])) {
 								operators.put(needadd[h], operators.get(needadd[h]) + 1);
 							} else {
 								operators.put(needadd[h], 1);
 							}
-							line21= line21.replace(needadd[h], " ");
+							line21= line21.replace(needadd[h], "");
 							
 							
 							/*int here = line21.indexOf(needadd[h]);
@@ -280,7 +307,9 @@ public class Halstead extends Algorithm {
 							line21 = line21.substring(here);
 							System.out.println(line21+"更改後");*/
 						}
+						
 					}
+					
 				}	
 			
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
