@@ -234,22 +234,22 @@ public class Halstead extends Algorithm {
 		String line20 = line;
 		String line21 = line;
 		
-		if(countbig != 0) {                    //假設我們要找case123
+		if(countbig != 0) {                    //假設我們要找string123
 			for (int h = 0; h < needadd.length; h++){   
-				while(line21.contains(needadd[h])){    //case123
-					int aaa,left,right;
-					char b;
-					aaa = needadd[h].length();   //case的長度
-					System.out.println(line21+"|"+aaa);
-					left = line21.indexOf(needadd[h]);   //獲得case第一個字C的位置
-					line21 = line21.substring(left); //刪到剩下 保留字為第一個
-					System.out.println(line21+"刪除後");
-					b = line21.charAt(aaa); 
-					String bb =String.valueOf(b); //轉char成String
-						if (b !=' '){
-							System.out.println("x");
+				while(line21.contains(needadd[h])){    //string123
+					int aaa,left,right,bbb ;char b;
+					aaa = needadd[h].length();           //算出string的長度(算出來是6)
+					System.out.println(line21+"原始碼"); //印出原本的句子 ,ex.private String className;
+					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
+					line21 = line21.substring(left);     //刪到剩下 保留字為第一個
+					System.out.println(line21+"刪除後"); //印出修改後的句子,ex.String className;
+					b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
+					String bb =String.valueOf(b);        //轉char成String
+					bbb = Integer.valueOf(b);            //String 轉成int
+						if (b !=' '){  					 //如果算出來的b值不是空白的話
+							System.out.println("x|" +b);
 							for (int aa=0; aa<10; aa++){
-								if (bb.equals(aa)){        //是否等於0-9
+								if (bbb == aa){        //是否等於0-9
 									System.out.println("FFFFFFFFFFFFFFFF");
 									operators.put(needadd[h], operators.get(needadd[h]) + 1);
 									int here = line21.indexOf(needadd[h]);
@@ -264,13 +264,12 @@ public class Halstead extends Algorithm {
 								}
 							}
 						}
-						else{
+						else{//如果算出來的b值是空白的話
 							System.out.println("aaaaaaaa");
 							operators.put(needadd[h],operators.get(needadd[h]) + 1);
 							int here = line21.indexOf(needadd[h]);
 							here = here + 1;
 							line21 = line21.substring(here);
-							//line22 = line22.replace(needadd[h],"");
 							System.out.println(line21+"更改後");
 						}
 					}
