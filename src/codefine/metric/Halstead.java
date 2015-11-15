@@ -75,7 +75,7 @@ public class Halstead extends Algorithm {
 		for(int i = 0; i < keyschar.length; i++)
 			operators.put(keyschar[i], 0);
 	}
-	
+	aa
 	public void getname(String fline) {
 		if(fline.contains("class")) {
 			countclass += 1;
