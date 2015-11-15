@@ -109,7 +109,7 @@ public class Halstead extends Algorithm {
 		int keyIndex = 0;			
 		int leftBound = -1;
 		int size = 0; // size of put
-		String line21 = line;
+		
 		line = line.replaceAll("\t", ""); // 將定位點取代掉
 		while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) { // 避免跳脫符號的"
 			if(size > 0) {
@@ -232,46 +232,60 @@ public class Halstead extends Algorithm {
 			line3 = line3.substring(bigindexx);
 		}
 		String line20 = line;
+		String line21 = line;
 		
 		if(countbig != 0) {                    //假設我們要找case123
 			for (int h = 0; h < needadd.length; h++){   
 				while(line21.contains(needadd[h])){    //case123
-					int aaa = 0;
+					int aaa,left,right;
+					char b;
 					aaa = needadd[h].length();   //case的長度
-					int left =0,right = 0;     
+					System.out.println(line21+"|"+aaa);
 					left = line21.indexOf(needadd[h]);   //獲得case第一個字C的位置
-					right = left +aaa-1;  //case之後1的位置
-					System.out.println(right);
-					System.out.println(left);
-					System.out.println(line);
-					//for (int aa=0; aa<9; aa++){
-					if (line21.charAt(right).equals(a)){        //是否等於0-9
-						System.out.println("FFFFFFFFFFFFFFFF");
-					}else{
-					
-						System.out.println("FxXXXXXXXXXXXXFFFFFF");
-					
-					line21 = line21.substring(0,left) ;
+					line21 = line21.substring(left); //刪到剩下 保留字為第一個
+					System.out.println(line21+"刪除後");
+					b = line21.charAt(aaa); 
+					String bb =String.valueOf(b); //轉char成String
+						if (b !=' '){
+							System.out.println("x");
+							for (int aa=0; aa<10; aa++){
+								if (bb.equals(aa)){        //是否等於0-9
+									System.out.println("FFFFFFFFFFFFFFFF");
+									operators.put(needadd[h], operators.get(needadd[h]) + 1);
+									int here = line21.indexOf(needadd[h]);
+									here = here + 1;
+									line21 = line21.substring(here);
+								}else{
+									System.out.println("FxXXXXXXXXXXXXFFFFFF");
+									operators.put(needadd[h], operators.get(needadd[h]) + 1);
+									int here = line21.indexOf(needadd[h]);
+									here = here + 1;
+									line21 = line21.substring(here);
+								}
+							}
+						}
+						else{
+							System.out.println("aaaaaaaa");
+							operators.put(needadd[h],operators.get(needadd[h]) + 1);
+							int here = line21.indexOf(needadd[h]);
+							here = here + 1;
+							line21 = line21.substring(here);
+							//line22 = line22.replace(needadd[h],"");
+							System.out.println(line21+"更改後");
+						}
 					}
-				}
-			}
-			//}	
+				}	
 			
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				int here = 0;
 				 //String t1 = keyschar[i].substring(keyschar[i].length()-1); //抓字串最後一字 , 好比class ,最後一個是空白
 				 
 					 while(line20.contains(keyschar[i])) {
-						 
-							operators.put(keyschar[i], operators.get(keyschar[i]) + 1);
+						    operators.put(keyschar[i], operators.get(keyschar[i]) + 1);
 							here = line20.indexOf(keyschar[i]);
 							here = here + 1;
 							line20 = line20.substring(here);
-							//t1 = "";
-						
-					 
-					
-					 }
+						 }
 				line20 = line;
 				
 			}
