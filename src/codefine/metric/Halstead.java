@@ -239,19 +239,15 @@ public class Halstead extends Algorithm {
 				while(line21.contains(needadd[h])){    //string123
 					int aaa,left,right,bbb ;char b;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
-					System.out.println(line21+"原始碼"); //印出原本的句子 ,ex.private String className;
 					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
 					line21 = line21.substring(left);     //刪到剩下 保留字為第一個
-					System.out.println(line21+"刪除後"); //印出修改後的句子,ex.String className;
 					b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
 					String bb =String.valueOf(b);        //轉char成String
 					bbb = Integer.valueOf(b);  //String 轉成int
 						if (b !=' '){  					 //如果算出來的b值不是空白的話
-							//System.out.println("x|" +b);
 							for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
-									System.out.println(bbb);
-										if (bbb == aa ){        //是否等於0-9
-											System.out.println("FFFFFFFFFFFFFFFF");
+								System.out.println(aa);
+									if (bbb == aa ){        //是否等於0-9
 											needadd[h]= needadd[h]+bb;
 											if(operands.containsKey(needadd[h])) {
 												operands.put(needadd[h], operands.get(needadd[h]) + 1);
@@ -259,7 +255,7 @@ public class Halstead extends Algorithm {
 												operands.put(needadd[h], 1);
 											}
 											line21= line21.replace(needadd[h], "");
-										}
+										}else{
 										for(int at=97; at<123; at++){
 										if (bbb == at ){        //是否等於a-z
 											System.out.println("a");
@@ -270,11 +266,9 @@ public class Halstead extends Algorithm {
 												operands.put(needadd[h], 1);
 											}
 											line21= line21.replace(needadd[h], "");
-											//break back1;
-											//System.out.println(needadd[h]);
 										}
 										}
-								   //=======================================================	
+										}  
 										for(int At=65; At<91; At++){
 										if (bbb == At ){        //是否等於A-Z
 											System.out.println("A");
@@ -294,26 +288,19 @@ public class Halstead extends Algorithm {
 									}//A~Z的最後
 								} //a~z的最後	
 							//0~9的最後
-						}else{//如果算出來的b值是空白的話
+						}/*else{//如果算出來的b值是空白的話
 							System.out.println("aaaaaaaa");
+							System.out.println(needadd[h]);
 							if(operators.containsKey(needadd[h])) {
 								operators.put(needadd[h], operators.get(needadd[h]) + 1);
 							} else {
 								operators.put(needadd[h], 1);
 							}
 							line21= line21.replace(needadd[h], "");
-							
-							
-							/*int here = line21.indexOf(needadd[h]);
-							here = here + 1;
-							line21 = line21.substring(here);
-							System.out.println(line21+"更改後");*/
-						}
-						
+						}*/
+						break;
 					}
-					
 				}	
-			
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				int here = 0;
 				 //String t1 = keyschar[i].substring(keyschar[i].length()-1); //抓字串最後一字 , 好比class ,最後一個是空白
