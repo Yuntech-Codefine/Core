@@ -242,8 +242,11 @@ public class Halstead extends Algorithm {
 					int aaa,left,right,bbb ;char b;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
 					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
+					String line22 = line21;
+					line22 = line21.substring(left);
 					line21 = line21.substring(left);     //刪到剩下 保留字為第一個
 					b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
+					int nextspace = line22.indexOf(" ");
 					String bb =String.valueOf(b);        //轉char成String
 					bbb = Integer.valueOf(b);  //String 轉成int
 						if (b !=' '){  
@@ -252,7 +255,7 @@ public class Halstead extends Algorithm {
 							for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
 								System.out.println(aa);
 									if (bbb == aa ){        //是否等於0-9
-											needadd[h]= needadd[h]+bb;
+											needadd[h]= needadd[h]+line22.substring(0,nextspace);
 											if(operands.containsKey(needadd[h])) {
 												operands.put(needadd[h], operands.get(needadd[h]) + 1);
 											} else {
