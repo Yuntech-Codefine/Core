@@ -235,38 +235,42 @@ public class Halstead extends Algorithm {
 		
 		if(countbig != 0) {                    //假設我們要找string123
 			for (int h = 0; h < needadd.length; h++){   
-				back1:
 				while(line21.contains(needadd[h])){    //string123
-					System.out.println(needadd[h]+"aaBBBCXXXXXXXXXXa");
-					
-					int aaa,left,right,bbb ;char b;
+					int aaa,left,right,bbb,count=0 ;char b;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
 					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
 					String line22 = line21;
 					line22 = line21.substring(left);
 					line21 = line21.substring(left);     //刪到剩下 保留字為第一個
-					b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
-					int nextspace = line22.indexOf(" ");
-					String bb =String.valueOf(b);        //轉char成String
-					bbb = Integer.valueOf(b);  //String 轉成int
-						if (b !=' '){  
-							System.out.println(needadd[h]+"aaBBBBCCCCCBBBa");
-							//如果算出來的b值不是空白的話
-							for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
+					b = line21.charAt(aaa); 
+					while(b !=' '){  //如果算出來的b值不是空白的話
+						String bb =String.valueOf(b);        //轉char成String
+						bbb = Integer.valueOf(b);  //String 轉成int
+						for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
 								System.out.println(aa);
 									if (bbb == aa ){        //是否等於0-9
-											needadd[h]= needadd[h]+line22.substring(0,nextspace);
+									    aaa = aaa+1 ;
+										b=line21.charAt(aaa);
+										count= count +1;
+										System.out.println(line);
+										System.out.println(b+"        0-9");
+										/*	needadd[h]= needadd[h]+line22.substring(0,nextspace);
 											if(operands.containsKey(needadd[h])) {
 												operands.put(needadd[h], operands.get(needadd[h]) + 1);
 											} else {
 												operands.put(needadd[h], 1);
 											}
-											line21= line21.replace(needadd[h], "");
+											line21= line21.replace(needadd[h], "");*/
 										}
 							}
 										for(int at=97; at<123; at++){
-										if (bbb == at ){        //是否等於a-z
-											System.out.println("a");
+											System.out.println(at);
+											if (bbb == at ){        //是否等於a-z
+												 aaa = aaa+1 ;
+												b=line21.charAt(aaa+1);
+												System.out.println(b+"       aaa");
+												count= count +1;
+											/*System.out.println("a");
 											needadd[h]= needadd[h]+line22.substring(0,nextspace);
 											if(operands.containsKey(needadd[h])) {
 												operands.put(needadd[h], operands.get(needadd[h]) + 1);
@@ -274,13 +278,18 @@ public class Halstead extends Algorithm {
 												operands.put(needadd[h], 1);
 											}
 											line21= line21.replace(needadd[h], "");
-											System.out.println(needadd[h]+"aaaa");
+											System.out.println(needadd[h]+"aaaa");*/
 										}
 										}
 										
 										for(int At=65; At<91; At++){
-										if (bbb == At ){        //是否等於A-Z
-											System.out.println("A");
+											System.out.println(At);
+												if (bbb == At ){        //是否等於A-Z
+													 aaa = aaa+1 ;
+													b=line21.charAt(aaa+1);
+													System.out.println(b+"AAAA");
+													count= count +1;
+											/*System.out.println("A");
 											needadd[h]= needadd[h]+line22.substring(0,nextspace);
 											if(operands.containsKey(needadd[h])) {
 												operands.put(needadd[h], operands.get(needadd[h]) + 1);
@@ -289,15 +298,18 @@ public class Halstead extends Algorithm {
 											}
 											line21= line21.replace(needadd[h], "");
 											//break back1;
-											System.out.println(needadd[h]);
+											System.out.println(needadd[h]);*/
 										}// else{
-											 //back1; //回到236去
-									
+											 
 										
 									}//A~Z的最後
-								} //a~z的最後	
-						break;
-						//0~9的最後
+										b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
+								}
+						int total =0;
+						total = aaa+ count + left;
+						String abc = line21.substring(left,total);
+						System.out.println(abc);
+						line21 = line21.substring(0,left-1) + line21.substring(total);
 						}
 						
 					}
