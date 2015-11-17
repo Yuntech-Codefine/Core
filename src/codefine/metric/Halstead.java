@@ -239,35 +239,28 @@ public class Halstead extends Algorithm {
 					int aaa,left,right,bbb,count=0 ;char b;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
 					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
-					String line22 = line21;
-					line22 = line21.substring(left);
 					line21 = line21.substring(left);     //刪到剩下 保留字為第一個
 					b = line21.charAt(aaa); 
-					while(b !=' '){  //如果算出來的b值不是空白的話
+					int ccc = aaa;
+					while(b != ' '){  //如果算出來的b值不是空白的話
+						int ccc1 =ccc;
 						String bb =String.valueOf(b);        //轉char成String
 						bbb = Integer.valueOf(b);  //String 轉成int
 						for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
 								System.out.println(aa);
 									if (bbb == aa ){        //是否等於0-9
-									    aaa = aaa+1 ;
-										b=line21.charAt(aaa);
+									    ccc = ccc + 1 ;
+										b=line21.charAt(ccc);
 										count= count +1;
 										System.out.println(line);
 										System.out.println(b+"        0-9");
-										/*	needadd[h]= needadd[h]+line22.substring(0,nextspace);
-											if(operands.containsKey(needadd[h])) {
-												operands.put(needadd[h], operands.get(needadd[h]) + 1);
-											} else {
-												operands.put(needadd[h], 1);
-											}
-											line21= line21.replace(needadd[h], "");*/
-										}
+									}
 							}
 										for(int at=97; at<123; at++){
 											System.out.println(at);
 											if (bbb == at ){        //是否等於a-z
-												 aaa = aaa+1 ;
-												b=line21.charAt(aaa+1);
+												 ccc = ccc+1 ;
+												b=line21.charAt(ccc);
 												System.out.println(b+"       aaa");
 												count= count +1;
 											/*System.out.println("a");
@@ -303,13 +296,13 @@ public class Halstead extends Algorithm {
 											 
 										
 									}//A~Z的最後
-										b = line21.charAt(aaa);              //抓出String className;中(保留字後一位的值)第6個位置(剛好會是空白的位置) 這算出來是char
+										
 								}
 						int total =0;
-						total = aaa+ count + left;
-						String abc = line21.substring(left,total);
-						System.out.println(abc);
-						line21 = line21.substring(0,left-1) + line21.substring(total);
+						total = ccc+ count + left;
+						//String abc = line21.substring(left,total);
+					System.out.println(line21+ "XXXXX");
+						line20 = line20.substring(0,left) + line21.substring(total);
 						}
 						
 					}
