@@ -264,11 +264,10 @@ public class Halstead extends Algorithm {
 											line21= line21.replace(needadd[h], "");
 										}
 							}
-							System.out.println(needadd[h]+"aaBBBBBBBa");
 										for(int at=97; at<123; at++){
 										if (bbb == at ){        //是否等於a-z
 											System.out.println("a");
-											needadd[h]= needadd[h]+bb;
+											needadd[h]= needadd[h]+line22.substring(0,nextspace);
 											if(operands.containsKey(needadd[h])) {
 												operands.put(needadd[h], operands.get(needadd[h]) + 1);
 											} else {
@@ -282,7 +281,7 @@ public class Halstead extends Algorithm {
 										for(int At=65; At<91; At++){
 										if (bbb == At ){        //是否等於A-Z
 											System.out.println("A");
-											needadd[h]= needadd[h]+bb;
+											needadd[h]= needadd[h]+line22.substring(0,nextspace);
 											if(operands.containsKey(needadd[h])) {
 												operands.put(needadd[h], operands.get(needadd[h]) + 1);
 											} else {
