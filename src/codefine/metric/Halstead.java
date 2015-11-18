@@ -245,6 +245,7 @@ public class Halstead extends Algorithm {
 					b = line21.charAt(first); 
 					System.out.println(b);
 					int ccc = first;
+					int ccc1 = 0;
 					while(ccc1 != ccc){  //如果算出來的b值不是空白的話
 						ccc1 = ccc;
 						String bb =String.valueOf(b);        //轉char成String
@@ -297,13 +298,15 @@ public class Halstead extends Algorithm {
 										
 								}
 						int total =0;
-						total = count + left; 
+						total = count + left+aaa; 
 						//String abc = line21.substring(left,total);
 					System.out.println(ccc);
 					System.out.println(left);
 					System.out.println(total);
 					System.out.println(count);
-						line21 = line21.substring(0,(left-1))+ line21.substring(total);
+					
+						line21 = line21.substring(0,(left))+ line21.substring(total);
+						System.out.println(line21);
 						}
 						
 					}
