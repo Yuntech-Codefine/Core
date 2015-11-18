@@ -237,6 +237,7 @@ public class Halstead extends Algorithm {
 			for (int h = 0; h < needadd.length; h++){   
 				while(line21.contains(needadd[h])){    //string123
 					int aaa,left,right,bbb,count=0 ;char b;
+					String needaddp;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
 					System.out.println(aaa);
 					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
@@ -283,15 +284,10 @@ public class Halstead extends Algorithm {
 													count= count +1;
 											/*System.out.println("A");
 											needadd[h]= needadd[h]+line22.substring(0,nextspace);
-											if(operands.containsKey(needadd[h])) {
-												operands.put(needadd[h], operands.get(needadd[h]) + 1);
-											} else {
-												operands.put(needadd[h], 1);
-											}
-											line21= line21.replace(needadd[h], "");
+											
 											//break back1;
 											System.out.println(needadd[h]);*/
-										}// else{
+										}
 											 
 										
 									}//A~Z的最後
@@ -299,12 +295,17 @@ public class Halstead extends Algorithm {
 								}
 						int total =0;
 						total = count + left+aaa; 
-						//String abc = line21.substring(left,total);
-					System.out.println(ccc);
-					System.out.println(left);
-					System.out.println(total);
-					System.out.println(count);
-					
+						System.out.println(ccc);
+						System.out.println(left);
+						System.out.println(total);
+						System.out.println(count);
+						needaddp = line21.substring(left,total);
+						System.out.println(needaddp);
+						if(operands.containsKey(needaddp)) {
+							operands.put(needaddp, operands.get(needaddp) + 1);
+						} else {
+							operands.put(needaddp, 1);
+						}
 						line21 = line21.substring(0,(left))+ line21.substring(total);
 						System.out.println(line21);
 						}
