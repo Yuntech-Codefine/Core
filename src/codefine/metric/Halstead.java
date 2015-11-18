@@ -238,48 +238,46 @@ public class Halstead extends Algorithm {
 				while(line21.contains(needadd[h])){    //string123
 					int aaa,left,right,bbb,count=0 ;char b;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
+					System.out.println(aaa);
 					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
-					line21 = line21.substring(left);     //刪到剩下 保留字為第一個
-					b = line21.charAt(aaa); 
-					int ccc = aaa;
-					while(b != ' '){  //如果算出來的b值不是空白的話
-						int ccc1 =ccc;
+					int first = left + aaa;  //第一個應該要判斷的
+					
+					b = line21.charAt(first); 
+					System.out.println(b);
+					int ccc = first;
+					while(ccc1 != ccc){  //如果算出來的b值不是空白的話
+						ccc1 = ccc;
 						String bb =String.valueOf(b);        //轉char成String
 						bbb = Integer.valueOf(b);  //String 轉成int
 						for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
-								System.out.println(aa);
+								
 									if (bbb == aa ){        //是否等於0-9
+										System.out.println(aa);
 									    ccc = ccc + 1 ;
 										b=line21.charAt(ccc);
 										count= count +1;
-										System.out.println(line);
+										System.out.println("CCCC   "+count);
 										System.out.println(b+"        0-9");
+										//break;
 									}
 							}
 										for(int at=97; at<123; at++){
-											System.out.println(at);
+											
 											if (bbb == at ){        //是否等於a-z
+												System.out.println(at);
 												 ccc = ccc+1 ;
 												b=line21.charAt(ccc);
 												System.out.println(b+"       aaa");
 												count= count +1;
-											/*System.out.println("a");
-											needadd[h]= needadd[h]+line22.substring(0,nextspace);
-											if(operands.containsKey(needadd[h])) {
-												operands.put(needadd[h], operands.get(needadd[h]) + 1);
-											} else {
-												operands.put(needadd[h], 1);
-											}
-											line21= line21.replace(needadd[h], "");
-											System.out.println(needadd[h]+"aaaa");*/
 										}
 										}
 										
 										for(int At=65; At<91; At++){
-											System.out.println(At);
+											
 												if (bbb == At ){        //是否等於A-Z
-													 aaa = aaa+1 ;
-													b=line21.charAt(aaa+1);
+													System.out.println(At);
+													 ccc = ccc+1 ;
+													b=line21.charAt(ccc+1);
 													System.out.println(b+"AAAA");
 													count= count +1;
 											/*System.out.println("A");
@@ -299,10 +297,13 @@ public class Halstead extends Algorithm {
 										
 								}
 						int total =0;
-						total = ccc+ count + left;
+						total = count + left; 
 						//String abc = line21.substring(left,total);
-					System.out.println(line21+ "XXXXX");
-						line20 = line20.substring(0,left) + line21.substring(total);
+					System.out.println(ccc);
+					System.out.println(left);
+					System.out.println(total);
+					System.out.println(count);
+						line21 = line21.substring(0,(left-1))+ line21.substring(total);
 						}
 						
 					}
