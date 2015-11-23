@@ -239,10 +239,12 @@ public class Halstead extends Algorithm {
 					int aaa,left,right,bbb,count=0 ;char b;
 					String needaddp;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
-					System.out.println(aaa);
+					System.out.println(aaa+needadd[h]);
 					left = line21.indexOf(needadd[h]);   //獲得string第一個字string的位置
 					int first = left + aaa;  //第一個應該要判斷的
-					
+					if (aaa >= line.length()){
+						break;
+					}
 					b = line21.charAt(first); 
 					System.out.println(b);
 					int ccc = first;
