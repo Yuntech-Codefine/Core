@@ -236,7 +236,7 @@ public class Halstead extends Algorithm {
 		if(countbig != 0) {                    //假設我們要找string123
 			for (int h = 0; h < needadd.length; h++){   
 				while(line21.contains(needadd[h])){    //string123
-					int aaa,left,right,bbb,count=0 ;char b;
+					int aaa,left,bbb,count=0 ;char b;
 					String needaddp;
 					aaa = needadd[h].length();           //算出string的長度(算出來是6)
 					System.out.println(aaa+needadd[h]);
@@ -250,8 +250,7 @@ public class Halstead extends Algorithm {
 					int ccc = first;
 					int ccc1 = 0;
 					while(ccc1 != ccc){  //如果算出來的b值不是空白的話
-						ccc1 = ccc;
-						String bb =String.valueOf(b);        //轉char成String
+						ccc1 = ccc;      //轉char成String
 						bbb = Integer.valueOf(b);  //String 轉成int
 						for (int aa=48; aa<58; aa++){ //0~9的阿斯ㄎㄧ碼
 								
@@ -318,7 +317,9 @@ public class Halstead extends Algorithm {
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				int here = 0;
 				 //String t1 = keyschar[i].substring(keyschar[i].length()-1); //抓字串最後一字 , 好比class ,最後一個是空白
-				 
+			/*	if (keyschar[i].length() >= line.length()){
+					break;
+				}*/
 					 while(line20.contains(keyschar[i])) {
 						    operators.put(keyschar[i], operators.get(keyschar[i]) + 1);
 							here = line20.indexOf(keyschar[i]);
@@ -328,6 +329,7 @@ public class Halstead extends Algorithm {
 				line20 = line;
 				
 			}
+			
 			
 			for(int replacekey = 0 ; replacekey < keyschar.length; replacekey++)
 	            line = line.replace(keyschar[replacekey], " ");
