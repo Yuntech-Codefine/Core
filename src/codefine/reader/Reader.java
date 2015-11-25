@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import org.json.*;
 
 import codefine.metric.Cyclomatic;
 import codefine.metric.Halstead;
@@ -31,7 +30,8 @@ public class Reader {
 			
 			while ((line = bufferedReader.readLine()) != null)
 			{
-				sloc.readLine(line);
+				System.out.println(line);
+				//sloc.readLine(line);
 				cyclomatic.readLine(line);
 				halstead.readLine(line);
 			}
@@ -45,5 +45,9 @@ public class Reader {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public String getValue() {
+		return "";
 	}
 }

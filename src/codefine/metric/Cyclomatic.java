@@ -67,8 +67,10 @@ public class Cyclomatic extends Algorithm {
 	
 	public void readLine(String line) {
 		if(!line.equals("")) {
-			line = line.replaceAll("\".*\"", "");
-			line = line.replaceAll("\'.*\'", "");
+			//取代""與其中的字串
+			line = line.replaceAll("\\( *\".*\" *\\)", "");
+			//取代''與其中的字串
+			line = line.replaceAll("\\( *\'.*\' *\\)", "");
 			
 			if(line.contains("//")) // 遇到註解
                line = line.substring(0, line.indexOf("//"));
@@ -85,7 +87,7 @@ public class Cyclomatic extends Algorithm {
 			}
 			
 			int i;
-			
+			// 尋找區塊註解
 			for(i = lastIndex; i < combinedLine.length(); i++) {
 				if(combinedLine.charAt(i) == '/') {
 					if(i + 1 < combinedLine.length()) {
@@ -106,14 +108,12 @@ public class Cyclomatic extends Algorithm {
 				
 				if(combinedLine.charAt(i) == '{') {
 					brackets++;
-					
 					if(brackets == 1) {
 						ClassModel classModel = new ClassModel();
 						classModel.className = searchClassName(combinedLine, i);
 						classList.add(classModel);
 					} else if(brackets == 2) {
 						int lastEnding = combinedLine.substring(0, i).lastIndexOf(';');
-						
 						if(lastEnding < 0) { // 前面都沒有分號;
 							if(!combinedLine.substring(combinedLine.lastIndexOf('{'), i).contains("="))
 								classList.get(classList.size() - 1).addMethod(new MethodModel(searchMethodName(combinedLine, i)));
