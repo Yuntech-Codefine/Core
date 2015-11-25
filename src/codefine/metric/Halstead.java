@@ -58,9 +58,10 @@ public class Halstead extends Algorithm {
         	"final ","finally", "long", "const", "float",  "super", "while", "String","int"};
     String[] SP = {",", ".", ";", "@","\\", "/*", "*/", "\""};  // 特殊符號
     String[] Num = {"0","1","2","3","4","5","6","7","8","9"};
-    String[] ann = {"@deprecated","@override","@Override","@Deprecated","@SuppressWarnings","@suppresswarnings","@SafeVarargs","@safevarargs","@FunctionalInterface",
+    String[] ann = {"@deprecated","@Override","@Deprecated","@SuppressWarnings","@suppresswarnings","@SafeVarargs","@safevarargs","@FunctionalInterface",
     		"@functionalinterface","@retentizzon","@Retention","@Docmented","@documented","@Target","@target","@Inherited","@inherited","@Repeatable","@repeatable","@Entity","@entity",
-    		"@author","@Author","@Ebook","@ebook","@redonly","@Redonly","@Critical","@critical","@Schedule","@schedule","@Alert","@alert","@repeatable","@Repeatable"};
+    		"@author","@Author","@Ebook","@ebook","@redonly","@Redonly","@Critical","@critical","@Schedule","@schedule","@Alert","@alert","@repeatable","@Repeatable","@interface",
+    		"@NonNull","@ReadOnly","@Regex","@Tainted","@Untainted","@m"};
     		
     int countclass = 0;
     int countbig = 0, bigindex = 0;
@@ -77,7 +78,8 @@ public class Halstead extends Algorithm {
 		for(int i = 0; i < keyschar.length; i++)
 			operators.put(keyschar[i], 0);
 	}
-
+	
+	
 	public void getname(String fline) {
 		if(fline.contains("class")) {
 			countclass += 1;
@@ -233,9 +235,18 @@ public class Halstead extends Algorithm {
 			
 			line3 = line3.substring(bigindexx);
 		}
+		
+		for(int b = 0; b < ann.length; b++) { 
+			  if (line.contains(ann[b])){
+				  line=line.replace(ann[b] ," ");
+				  System.out.println("幹你老師");
+			  }
+			}
+			
+		
 		String line20 = line;
 		String line21 = line;
-		
+	
 		if(countbig != 0) {                    //假設我們要找string123
 			for (int h = 0; h < needadd.length; h++){   
 				while(line21.contains(needadd[h])){    //string123
@@ -279,6 +290,7 @@ public class Halstead extends Algorithm {
 											if (bbb == at ){        //是否等於a-z
 											
 												 ccc = ccc+1 ;
+												 System.out.println(line+" "+ at);
 												b=line21.charAt(ccc);
 												
 												count= count +1;
@@ -315,12 +327,6 @@ public class Halstead extends Algorithm {
 						}
 						
 					}
-			for(int b = 0; b < ann.length; b++) { 
-			  if (line.contains(ann[b])){
-				  line=line.replace(ann[b] ," ");
-				  System.out.println("幹你老師");
-			  }
-			}
 			
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				int here = 0;
