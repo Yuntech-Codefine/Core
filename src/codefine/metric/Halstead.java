@@ -58,7 +58,10 @@ public class Halstead extends Algorithm {
         	"final ","finally", "long", "const", "float",  "super", "while", "String"};
     String[] SP = {",", ".", ";", "@","\\", "/*", "*/", "\""};  // 特殊符號
     String[] Num = {"0","1","2","3","4","5","6","7","8","9"};
-    
+    String[] ann = {"@deprecated","@override","@Override","@Deprecated","@SuppressWarnings","@suppresswarnings","@SafeVarargs","@safevarargs","@FunctionalInterface",
+    		"@functionalinterface","@retentizzon","@Retention","@Docmented","@documented","@Target","@target","@Inherited","@inherited","@Repeatable","@repeatable","@Entity","@entity",
+    		"@author","@Author","@Ebook","@ebook","@redonly","@Redonly","@Critical","@critical","@Schedule","@schedule","@Alert","@alert","@repeatable","@Repeatable"};
+    		
     int countclass = 0;
     int countbig = 0, bigindex = 0;
     int countsmall = 0, smallindex = 0;
@@ -312,14 +315,19 @@ public class Halstead extends Algorithm {
 						}
 						
 					}
-			
+			for(int b = 0; b < ann.length; b++) { 
+			  if (line.contains(ann[b])){
+				  line=line.replace(ann[b] ," ");
+				  System.out.println("幹你老師");
+			  }
+			}
 			
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
 				int here = 0;
 				 //String t1 = keyschar[i].substring(keyschar[i].length()-1); //抓字串最後一字 , 好比class ,最後一個是空白
-			/*	if (keyschar[i].length() >= line.length()){
+			if (keyschar[i].length() >= line.length()){
 					break;
-				}*/
+				}
 					 while(line20.contains(keyschar[i])) {
 						    operators.put(keyschar[i], operators.get(keyschar[i]) + 1);
 							here = line20.indexOf(keyschar[i]);
