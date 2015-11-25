@@ -62,7 +62,7 @@ public class Halstead extends Algorithm {
     		"@functionalinterface","@retentizzon","@Retention","@Docmented","@documented","@Target","@target","@Inherited","@inherited","@Repeatable","@repeatable","@Entity","@entity",
     		"@author","@Author","@Ebook","@ebook","@redonly","@Redonly","@Critical","@critical","@Schedule","@schedule","@Alert","@alert","@repeatable","@Repeatable","@interface",
     		"@NonNull","@ReadOnly","@Regex","@Tainted","@Untainted","@m"};
-    		
+    boolean decide = false;
     int countclass = 0;
     int countbig = 0, bigindex = 0;
     int countsmall = 0, smallindex = 0;
@@ -113,6 +113,16 @@ public class Halstead extends Algorithm {
 		int keyIndex = 0;			
 		int leftBound = -1;
 		int size = 0; // size of put
+		if (line.contains("/*")){
+			decide = true;
+		}
+		if (line.contains("*/")){
+			decide = false;
+		}
+		if ((decide == true)&&(!line.contains("*/")) ){
+			return;
+		}else{
+			
 		
 		line = line.replaceAll("\t", ""); // 將定位點取代掉
 		while((keyIndex = line.substring(leftBound + 1).indexOf("\"")) >= 0) { // 避免跳脫符號的"
@@ -410,7 +420,7 @@ public class Halstead extends Algorithm {
 	        operands.clear();
 		}
 	}
-	
+	}
 	public String getValue() {
 		JSONArray jsonArr = new JSONArray();
 		
