@@ -269,13 +269,13 @@ public class Halstead extends Algorithm {
 					if (aaa == temp.length()){
 						break;
 					}
+					/*if (dc > 0){
 					dc= left -1;
 					if (line.charAt(dc) != ' '){
 						break;
 					
 					}
-					System.out.println(aaa+needadd[h]);
-					System.out.println(line.length());
+					}*/
 					b = line21.charAt(first); 
 					int ccc = first;
 					int ccc1 = 0;
@@ -297,7 +297,7 @@ public class Halstead extends Algorithm {
 											if (bbb == at ){        //是否等於a-z
 											
 												 ccc = ccc+1 ;
-												 System.out.println(line+" "+ at);
+												
 												b=line21.charAt(ccc);
 												
 												count= count +1;
@@ -337,44 +337,46 @@ public class Halstead extends Algorithm {
 			String line20 = line21;
 		
 			for(int i = 0; i < keyschar.length; i++) { //從第一個保留字開始
-				
+				line21 = line20;
+				System.out.println(i + "  " +line21);
 				int here = 0;
 				 //String t1 = keyschar[i].substring(keyschar[i].length()-1); //抓字串最後一字 , 好比class ,最後一個是空白
-			if (keyschar[i].length() >= line21.length()){
+			/*if (keyschar[i].length() >= line21.length()){
 					break;
-				}
+				}*/
 			int key,bc;			
 			key = line21.indexOf(keyschar[i]);
 			bc = key -1;
 			int cd = key +1;
-			if (bc > 0){
+			/*if (bc > 0){
 				 if (line21.charAt(bc) != ' '){
 						break;
 				 }
-			}
+			}*/
 			
 			
 					 while(line21.contains(keyschar[i])) {
-						 
+						 System.out.println(line21);
 						    operators.put(keyschar[i], operators.get(keyschar[i]) + 1);
 							here = line21.indexOf(keyschar[i]);
 							here = here + 1;
-							line21 = line21.substring(here);
+							line21 = line21.replace(keyschar[i],"");
+							System.out.println("After"+line21);
 						 }
-				line21 = line;
 				
+				line21 = line;
 			}
 			
 		
 			for(int replacekey = 0 ; replacekey < keyschar.length; replacekey++){
-				int key,bc;			
+				/*int key,bc;			
 				key = line21.indexOf(keyschar[replacekey]);
 				bc = key -1;
 				if (bc > 0){
 					if (line21.charAt(bc) != ' '){
 						break;
 					}
-				}
+				}*/
 				
 	            line = line.replace(keyschar[replacekey], " ");
 		}
